@@ -5,7 +5,6 @@ from .models import Post
 from .forms import CommentForm
 from django.contrib import messages
 
-
 class PostList(generic.ListView):
     model = Post
     queryset = Post.objects.filter(status=1).order_by("-created_on")
@@ -18,7 +17,7 @@ class PostDetail(View):
     def get(self, request, slug, *args, **kwargs):
         queryset = Post.objects.filter(status=1)
         post = get_object_or_404(queryset, slug=slug)
-        comments = post.comments.filter(approved=True).order_by("-created_on")
+        comments = post.comments.order_by("-created_on")
         liked = False
         if post.likes.filter(id=self.request.user.id).exists():
             liked = True
@@ -39,23 +38,15 @@ class PostDetail(View):
 
         queryset = Post.objects.filter(status=1)
         post = get_object_or_404(queryset, slug=slug)
-        comments = post.comments.filter(approved=True).order_by("-created_on")
+        comments = post.comments.order_by("-created_on")
         liked = False
         if post.likes.filter(id=self.request.user.id).exists():
             liked = True
 
         comment_form = CommentForm(data=request.POST)
-        messages.add_message(request, messages.INFO, 'Successful Comment Request!')
+        messages.add_message(request, messages.INFO, 'Comment is deployd')
         # from https://stackoverflow.com/a/3442918
-        
-        def moderate_comment(sender, instance, **kwargs):
-            if not instance.id:
-                instance.is_public = True
-                from django.contrib.comments.models import Comment
-                from django.db.models import signals
-
-        signals.pre_save.connect(moderate_comment, sender=Comment)
-
+    
         return render(
             request,
             "post_detail.html",
@@ -67,3 +58,14 @@ class PostDetail(View):
                 "liked": liked
             },
         )
+
+class PostLike(View):
+    
+    def post(self, request, slug, *args, **kwargs):
+        post = get_object_or_404(Post, slug=slug)
+        if post.likes.filter(id=request.user.id).exists():
+            post.likes.remove(request.user)
+        else:
+            post.likes.add(request.user)
+
+        return HttpResponseRedirect(reverse('post_detail', args=[slug]))
