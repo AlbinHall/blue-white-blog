@@ -33,17 +33,30 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a href="{% url 'home' %}" class="nav-link" style="color: white;">Home</a>
+                    <a href="{% url 'home' %}" class="nav-link" style="color: white;">Home |  </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'home' %}" class="nav-link" style="color: white;">Discussions</a>
+                    <a href="{% url 'home' %}" class="nav-link" style="color: white;">Discussions |  </a>
                 </li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item text-right">
+                        <a class="nav-link" href="{% url 'account_logout' %}"style="color: white;">Logout |  </a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item text-right">
+                        <a class="nav-link" href="{% url 'account_signup' %}"style="color: white;">Register |  </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'account_login' %}"style="color: white;">Login |</a>
+                    </li>
+                    {% endif %}
             </ul>
         </div>
     </nav>
+
     {% block content%}
     {% endblock %}
-    <footer class="footer mt-auto py-3" style="background-color: #234b9a;">
+    <footer class="footer justify-content-center mt-4" style="background-color: #234b9a;">
         <p class="text-center" style="color: white;">Contacts us <a href="#" class="navbar-brand">here</a></p>
     </footer>
 </body>

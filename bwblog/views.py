@@ -10,7 +10,7 @@ class PostList(generic.ListView):
     model = Post
     queryset = Post.objects.filter(status=1).order_by("-created_on")
     template_name = "index.html"
-    paginate_by = 6
+    paginate_by = 3
 
 
 class PostDetail(View):
@@ -29,7 +29,7 @@ class PostDetail(View):
             {
                 "post": post,
                 "comments": comments,
-                "commented": True,
+                "commented": False,
                 "liked": liked,
                 "comment_form": CommentForm()
             },
@@ -45,20 +45,16 @@ class PostDetail(View):
             liked = True
 
         comment_form = CommentForm(data=request.POST)
-        messages.add_message(request, messages.INFO, 'Comment is deployd')
-        # from https://stackoverflow.com/a/3442918
-    
-        return render(
-            request,
-            "post_detail.html",
-            {
-                "post": post,
-                "comments": comments,
-                "commented": True,
-                "comment_form": comment_form,
-                "liked": liked
-            },
-        )
+        messages.add_message(request, messages.INFO, 'Successful Comment Request!')
+        if comment_form.is_valid():
+            comment_form.instance.email = request.user.email
+            comment_form.instance.name = request.user.username
+            comment = comment_form.save(commit=False)
+            comment.post = post
+            comment.save()
+        else:
+            comment_form = CommentForm()
+
 
 
 class PostLike(View):
