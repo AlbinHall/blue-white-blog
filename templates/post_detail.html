@@ -1,5 +1,5 @@
 {% extends 'base.html' %} {% block content %}
-
+{% load crispy_forms_tags %}
 <div class="masthead">
     <div class="container">
         <div class="row g-0">
@@ -34,6 +34,7 @@
 
                     <div class="col-1">
                         <strong>
+                            {% if user.is_authenticated %}
                             <form class="d-inline" action="{% url 'post_like' post.slug %}" method="POST">
                                 {% csrf_token %}
                                 {% if liked %}
@@ -44,6 +45,9 @@
                                         class="far fa-heart"></i></button>
                                 {% endif %}
                             </form>
+                            {% else %}
+                            <span class="text-secondary"><i class="far fa-heart"></i></span>
+                            {% endif %}
                             <!-- The number of likes goes before the closing strong tag -->
                             <span class="text-secondary">{{ post.number_of_likes }} </span>
                         </strong>
@@ -74,6 +78,27 @@
         {% endif %}
     </div>
 </div>
+<div class="col-md-12 card mb-4  mt-3 ">
+    <div class="card-body">
+        <!-- For later -->
+        {% if commented %}
+        <div class="alert alert-success" role="alert">
+            Your comment is awaiting approval
+        </div>
+        {% else %}
+        {% if user.is_authenticated %}
+
+        <h3>Leave a comment:</h3>
+        <p>Posting as: {{ user.username }}</p>
+        <form method="post" style="margin-top: 1.3em;">
+            {{ comment_form | crispy }}
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success btn-lg">Submit</button>
+        </form>
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
 <!-- Modal that activates if user wants to delete their comment-->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
@@ -86,7 +111,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                ...
+                Yo can't undo this change
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" data-dismiss="modal">Yes</button>

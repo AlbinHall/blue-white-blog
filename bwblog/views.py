@@ -54,6 +54,8 @@ class PostDetail(View):
             comment.save()
         else:
             comment_form = CommentForm()
+            
+        return HttpResponseRedirect(reverse('post_detail', args=[slug]))
 
 
 

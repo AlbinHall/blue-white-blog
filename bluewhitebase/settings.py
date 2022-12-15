@@ -48,8 +48,10 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'django.contrib.staticfiles',
     'cloudinary',
-    'bwblog',
     'django_summernote',
+    'crispy_forms',
+    'bwblog',
+
 ]
 
 SITE_ID = 1
@@ -59,6 +61,7 @@ LOGOUT_REDIRECT_URL = '/'
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-info',

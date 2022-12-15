@@ -21,12 +21,22 @@
                                     <p class="author">Author: {{ post.author }}</p>
                                 </div>
                             </div>
+                            {% if user.is_authenticated %}
                             <a href="{% url 'post_detail' post.slug %}" class="post-link">
                                 <h2 class="card-title" style="color: black;">{{ post.title }}</h2>
                                 <p class="card-text" style="color: black;">{{ post.excerpt }}</p>
                             </a>
                             <hr />
-                            <p class="card-text text-muted h6">{{ post.created_on }} <i class="far fa-heart"></i>{{ post.number_of_likes }}</p>
+                            <p class="card-text text-muted h6">{{ post.created_on }} <i
+                                    class="far fa-heart"></i>{{ post.number_of_likes }}</p>
+                            {% else %}
+                            <a href="{% url 'post_detail' post.slug %}" class="post-link" data-toggle="modal"
+                                data-target="#exampleModal">
+                                <h2 class="card-title" style="color: black;">{{ post.title }}</h2>
+                                <p class="card-text" style="color: black;">{{ post.excerpt }}</p>
+                            </a>
+                            <hr />
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -52,4 +62,25 @@
     {% endif %}
 </div>
 
+<!-- Modal that pops-up if user is not autheticated -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">You need to be logged in to view this content</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                If You Dont Already Have An Account You Can Sign Up By Clicking At The Sign Up Button!
+            </div>
+            <div class="modal-footer">
+                <a href="{% url 'account_login' %}" class="btn btn-success">Login</a>
+                <a href="{% url 'account_signup' %}" class="btn btn-primary">Sign Up</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
