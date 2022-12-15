@@ -3,18 +3,18 @@
 <div class="masthead">
     <div class="container">
         <div class="row g-0">
-            <div class="col-md-6 masthead-text">
+            <div class="col-md-12 masthead-text text-center">
                 <!-- Post title goes in these h1 tags -->
                 <h1 class="post-title">{{ post.title }}</h1>
                 <!-- Post author goes before the | the post's created date goes after -->
                 <p class="post-subtitle">{{ post.author }} | {{ post.created_on }}</p>
             </div>
-            <div class="d-none d-md-block col-md-6 masthead-image">
+            <div class="d-none d-md-block col-md-12 masthead-image">
                 <!-- The featured image URL goes in the src attribute -->
                 {% if "placeholder" in post.featured_image.url %}
                 <img src="#" width="100%">
                 {% else %}
-                <img src=" {{ post.featured_image.url }}" width="100%">
+                <img class="rounded" src=" {{ post.featured_image.url }}" width="100%">
                 {% endif %}
             </div>
         </div>
@@ -37,21 +37,16 @@
                             <form class="d-inline" action="{% url 'post_like' post.slug %}" method="POST">
                                 {% csrf_token %}
                                 {% if liked %}
-                                <button type="submit" name="blogpost_id" value="{{post.slug}}" class="btn-like"><i class="fas fa-heart"></i></button>
+                                <button type="submit" name="blogpost_id" value="{{post.slug}}" class="btn-like"><i
+                                        class="fas fa-heart"></i></button>
                                 {% else %}
-                                <button type="submit" name="blogpost_id" value="{{post.slug}}" class="btn-like"><i class="far fa-heart"></i></button>
+                                <button type="submit" name="blogpost_id" value="{{post.slug}}" class="btn-like"><i
+                                        class="far fa-heart"></i></button>
                                 {% endif %}
                             </form>
-                        <!-- The number of likes goes before the closing strong tag -->
-                        <span class="text-secondary">{{ post.number_of_likes }} </span>
+                            <!-- The number of likes goes before the closing strong tag -->
+                            <span class="text-secondary">{{ post.number_of_likes }} </span>
                         </strong>
-                    </div>
-                    <div class="col-1">
-                        {% with comments.count as total_comments %}
-                        <strong class="text-secondary"><i class="far fa-comments"></i>
-                            <!-- Our total_comments variable goes before the closing strong tag -->
-                            {{ total_comments }}</strong>
-                        {% endwith %}
                     </div>
                 </div>
             </div>
@@ -62,47 +57,43 @@
             <hr>
         </div>
     </div>
+    <h3> {{ comments.count }} Comments:</h3>
+    <br>
+    {% if not post.comments.all %}
+    Be the first To Write a comment!
+    {% else %}
+    {% for comment in post.comments.all %}
     <div class="row">
-        <div class="col-md-8 card mb-4  mt-3 ">
-            <h3>Comments:</h3>
-            <div class="card-body">
-                <!-- We want a for loop inside the empty control tags to iterate through each comment in comments -->
-                {% for comment in comments %}
-                <div class="comments" style="padding: 10px;">
-                    <p class="font-weight-bold">
-                        <!-- The commenter's name goes here. Check the model if you're not sure what that is -->
-                        {{ comment.name }}
-                        <span class=" text-muted font-weight-normal">
-                            <!-- The comment's created date goes here -->
-                            {{ comment.created_on }}
-                        </span> wrote:
-                    </p>
-                    <!-- The body of the comment goes before the | -->
-                    {{ comment.body | linebreaks }}
-                </div>
-                <!-- Our for loop ends here -->
-                {% endfor %}
-            </div>
+        <div class="col-md-12 card-body mb-4 mt-3 border border-dark rounded">
+            <h5 class="card-title">{{ comment.name }} | {{ comment.created_on }} | {{ comment.author }}</h5>
+            <p class="card-text">{{ comment.body }}</p>
+            <button class="btn btn-outline-danger" data-toggle="modal" data-target="#exampleModal">Delete</button>
+            <a href="#" class="btn btn-outline-primary">Edit</a>
         </div>
-        <div class="col-md-4 card mb-4  mt-3 ">
-            <div class="card-body">
-                <!-- For later -->
-                {% if commented %}
-                <div class="alert alert-success" role="alert">
-                    Your comment is now live
-                {% else %}
-                </div>
-                <h3>Leave a comment:</h3>
-                <p>Posting as: {{ user.username }}</p>
-                <form method="post" style="margin-top: 1.3em;">
-                    {{ comment_form }}
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-signup btn-lg">Submit</button>
-                </form>
-                {% endif %}
+        
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+<!-- Modal that activates if user wants to delete their comment-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Do you really want to delete this post?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Yes</button>
+                <button type="button" class="btn btn-danger">No</button>
             </div>
         </div>
     </div>
 </div>
-
 {% endblock content %}

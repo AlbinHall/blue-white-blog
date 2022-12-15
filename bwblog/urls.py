@@ -1,4 +1,5 @@
 from . import views
+from .views import AddComment
 from django.urls import path
 
 urlpatterns = [
