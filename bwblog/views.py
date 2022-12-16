@@ -73,12 +73,11 @@ class PostLike(View):
 
 
 class DeleteCommentView(DeleteView):
-
     model = Comment
+    template_name = 'confirm_delete.html'
 
-    success_url = "post_detail"
+    def post(self, request, pk, slug, *args, **kwargs):
+        comment = get_object_or_404(Comment, pk=pk)
+        comment.delete()
 
-    template_name = "post_detail.html"
-
-
-
+        return HttpResponseRedirect(reverse('post_detail', args=[slug]))

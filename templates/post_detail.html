@@ -34,7 +34,7 @@
                     <div class="col-1">
                         <strong>
                             {% if user.is_authenticated %}
-                            <form class="d-inline" action="{% url 'post_like' post.slug %}" %}" method="POST">
+                            <form class="d-inline" action="{% url 'post_like' post.slug %}"method="POST">
                                 {% csrf_token %}
                                 {% if liked %}
                                 <button type="submit" name="blogpost_id" value="{{post.slug}}" class="btn-like"><i
@@ -71,7 +71,7 @@
             <h5 class="card-title">{{ comment.name }} | {{ comment.created_on }} </h5>
             <p class="card-text">{{ comment.body }}</p>
             {% if comment.name == user.username %}
-            <a href="{% url 'delete_comment' comment.id %}" class="btn btn-outline-danger">Delete</a>
+            <a href="{% url 'delete_comment' pk=comment.id slug=post.slug %}" class="btn btn-outline-danger">Delete</a>
             <a href="#" class="btn btn-outline-primary">Edit</a>
             {% endif %}
         </div>
