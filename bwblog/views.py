@@ -71,6 +71,8 @@ class PostLike(View):
 
         return HttpResponseRedirect(reverse('post_detail', args=[slug]))
 
+# got help from Tutor at code institute with DeleteCommentView
+
 
 class DeleteCommentView(DeleteView):
     model = Comment
@@ -83,4 +85,37 @@ class DeleteCommentView(DeleteView):
             messages.add_message(request, messages.SUCCESS, 'Comment deleted!')
         else:
             messages.add_message(request, messages.ERROR, 'You can only delete your own comments!')
+        return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+
+
+class UpdateCommentView(UpdateView):
+    model = Comment
+    template_name = 'edit_comment.html'
+    fields = ("body", )
+
+    def get(self, request, slug, *args, **kwargs):
+        queryset = Post.objects.filter(status=1)
+        post = get_object_or_404(queryset, slug=slug)
+        comments = post.comments.order_by("-created_on")
+
+        return render(
+            request,
+            "edit_comment.html",
+            {
+                "post": post,
+                "comments": comments,
+                "comment_form": CommentForm()
+            },
+        )
+
+    def post(self, request, pk, slug, *args, **kwargs):
+        queryset = Post.objects.filter(status=1)
+        post = get_object_or_404(queryset, slug=slug)
+        comment = get_object_or_404(Comment, pk=pk)
+        comment_form = CommentForm(data=request.POST)
+
+        if comment.name == request.user.username:
+            messages.add_message(request, messages.SUCCESS, 'You have now updated your comment!')
+        else:
+            messages.add_message(request, messages.ERROR, 'You can only upadte your own comment!')
         return HttpResponseRedirect(reverse('post_detail', args=[slug]))
