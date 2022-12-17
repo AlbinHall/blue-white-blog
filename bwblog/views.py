@@ -51,6 +51,14 @@ class PostDetail(View):
         if comment_form.is_valid():
             comment_form.instance.email = request.user.email
             comment_form.instance.name = request.user.username
+            try:
+                parent_id = int(request.POST.get('parent_id'))
+            except:
+                parent_id = None
+            if parent_id:
+                parent_qs = Comment.objects.filter(parent__id=parent_id)
+                if parent_qs.exists():
+                    parent_obj = parent_qs.first()
             comment = comment_form.save(commit=False)
             comment.post = post
             comment.save()
@@ -94,28 +102,15 @@ class UpdateCommentView(UpdateView):
     fields = ("body", )
 
     def get(self, request, slug, *args, **kwargs):
-        queryset = Post.objects.filter(status=1)
-        post = get_object_or_404(queryset, slug=slug)
-        comments = post.comments.order_by("-created_on")
-
         return render(
             request,
             "edit_comment.html",
             {
-                "post": post,
-                "comments": comments,
                 "comment_form": CommentForm()
             },
         )
 
     def post(self, request, pk, slug, *args, **kwargs):
-        queryset = Post.objects.filter(status=1)
-        post = get_object_or_404(queryset, slug=slug)
         comment = get_object_or_404(Comment, pk=pk)
-        comment_form = CommentForm(data=request.POST)
-
-        if comment.name == request.user.username:
-            messages.add_message(request, messages.SUCCESS, 'You have now updated your comment!')
-        else:
-            messages.add_message(request, messages.ERROR, 'You can only upadte your own comment!')
+        
         return HttpResponseRedirect(reverse('post_detail', args=[slug]))
