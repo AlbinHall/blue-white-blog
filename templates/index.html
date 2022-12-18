@@ -1,6 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
+<header>
+    <div class="text-center pt-4 ">
+        <h1>Welcome To IFK Göteborg Fansite</h1>
+        <p>
+            <small class="text-muted">The latest new concerning IFK Göteborg</small>
+        </p>
+        <div>
+</header>
+
 <div class="container">
     <div class="row">
 
@@ -9,15 +18,15 @@
             <div class="row">
                 {% for post in post_list %}
                 <div class="col-md-12">
-                    <div class="card mt-5 mb-5">
-                        <div class="card-body">
-                            <div class="image-container ">
+                    <div class="card mt-4 mb-5">
+                        <div class="card-body bg-light">
+                            <div class="image-container">
                                 {% if "placeholder" in post.featured_image.url %}
                                 <img src="#" alt="" class="card-img-top">
                                 {% else %}
-                                <img src="{{ post.featured_image.url }}" alt="" class="card-img-top">
+                                <img src="{{ post.featured_image.url }}" alt="" class="card-img-top rounded">
                                 {% endif %}
-                                <div class="image-flash">
+                                <div class="card-img-flash">
                                     <p class="author">Author: {{ post.author }}</p>
                                 </div>
                             </div>
@@ -27,8 +36,8 @@
                                 <p class="card-text" style="color: black;">{{ post.excerpt }}</p>
                             </a>
                             <hr />
-                            <p class="card-text text-muted h6">{{ post.created_on }} <i
-                                    class="far fa-heart"></i>{{ post.number_of_likes }}</p>
+                            <p class="card-text text-muted h6">{{ post.created_on }} 
+                                <i class=" ml-1 fa-solid fa-thumbs-up"></i>{{ post.number_of_likes }}</p>
                             {% else %}
                             <a href="{% url 'post_detail' post.slug %}" class="post-link" data-toggle="modal"
                                 data-target="#exampleModal">

@@ -12,7 +12,7 @@
             <div class=" d-md-block col-md-12 masthead-image">
                 <!-- The featured image URL goes in the src attribute -->
                 {% if "placeholder" in post.featured_image.url %}
-                <img src="#" width="100%">
+                <img src="https://picsum.photos/200" width="100%">
                 {% else %}
                 <img class="rounded" src=" {{ post.featured_image.url }}" width="100%">
                 {% endif %}
@@ -37,11 +37,9 @@
                             <form class="d-inline" action="{% url 'post_like' post.slug %}" method="POST">
                                 {% csrf_token %}
                                 {% if liked %}
-                                <button type="submit" name="blogpost_id" value="{{post.slug}}" class="btn-like"><i
-                                        class="fas fa-heart"></i></button>
+                                <button type="submit" class="btn btn-secondary" name="blogpost_id" value="{{post.slug}}" class="btn-like"><i class="fa-solid fa-thumbs-up"></i></button>
                                 {% else %}
-                                <button type="submit" name="blogpost_id" value="{{post.slug}}" class="btn-like"><i
-                                        class="far fa-heart"></i></button>
+                                <button type="submit" class="btn btn-outline-secondary" name="blogpost_id" value="{{post.slug}}" class="btn-like"><i class="fa-regular fa-thumbs-up"></i></button>
                                 {% endif %}
                             </form>
                             {% else %}
@@ -75,9 +73,10 @@
             <a href="{% url 'edit_comment' pk=comment.id slug=post.slug %}" class="btn btn-outline-primary">Edit</a>
             {% endif %}
         </div>
+    </div>
+
         {% endfor %}
         {% endif %}
-    </div>
 </div>
 <div class="col-md-12 card mb-4  mt-3 ">
     <div class="card-body">

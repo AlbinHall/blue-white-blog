@@ -1,3 +1,24 @@
-a {
+/*overwriting styling of navbar */
+
+.navbar .navbar-brand {
     color: white;
+    font-size: 24px;
+    margin-left: 20px;
+}
+
+.navbar .navbar-nav .nav-item > a{
+    color: white;
+}
+
+.blue {
+    height: 100%;
+    background-color: blue;
+}
+
+h1 {
+    padding-top: 20px;
+}
+
+.border-none {
+    size: 200%;
 }
