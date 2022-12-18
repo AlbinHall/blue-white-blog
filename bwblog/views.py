@@ -93,7 +93,7 @@ class UpdateCommentView(UpdateView):
     template_name = 'edit_comment.html'
     fields = ("body", )
 
-    def get_success_url(self): # Got help with this function from tutor 'Ger' from code institute
+    def get_success_url(self):  # Got help with this function from tutor 'Ger' from code institute
         return reverse('post_detail', kwargs={'slug': self.object.post.slug})
 
     def get(self, request, slug, *args, **kwargs):
@@ -108,8 +108,12 @@ class UpdateCommentView(UpdateView):
     def put(self, request, pk, slug, *args, **kwargs):
         comment = get_object_or_404(Comment, pk=pk)
         comment_form = CommentForm(data=request.POST)
-        if comment_form.is_valid():
-            comment.save()
+        if comment.name == request.user.username:
+            if comment_form.is_valid():
+                comment.save()
+                messages.add_message(request, messages.SUCCESS, 'Comment Updated!')
+            else:
+                comment_form = CommentForm()
         else:
-            comment_form = CommentForm()
+            messages.add_message(request, messages.ERROR, 'You can only update your own comment!')
         return HttpResponseRedirect(reverse('post_detail', args=[slug]))
