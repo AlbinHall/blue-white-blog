@@ -51,14 +51,5 @@ class Comment(models.Model):
     def __str__(self):
         return f"Comment {self.body} by {self.name}"
 
-    def children(self):  # replies
-        return Comment.objects.filter(parent=self)
-
-    @property
-    def is_parent(self):
-        if self.parent is None:
-            return True
-        return False
-
     def number_of_comments(self):
         return self.comments.count()

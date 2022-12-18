@@ -70,13 +70,6 @@
         <div class="col-md-12 card-body mb-4 mt-3 border border-dark rounded">
             <h5 class="card-title">{{ comment.name }} | {{ comment.created_on }} </h5>
             <p class="card-text">{{ comment.body }}</p>
-            <p><strong>Replying as:</strong> {{ user.username }}</p>
-            <form method="post" style="margin-top: 1.3em;">
-                {{ comment_form | crispy }}
-                {% csrf_token %}
-                <input type="hidden" name="parent_id" value="{{ comment.id }}">
-                <button type="submit" class="btn btn-success btn-lg">Reply</button>
-            </form>
             {% if comment.name == user.username %}
             <a href="{% url 'delete_comment' pk=comment.id slug=post.slug %}" class="btn btn-outline-danger">Delete</a>
             <a href="{% url 'edit_comment' pk=comment.id slug=post.slug %}" class="btn btn-outline-primary">Edit</a>

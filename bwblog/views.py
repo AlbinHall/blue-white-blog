@@ -51,14 +51,6 @@ class PostDetail(View):
         if comment_form.is_valid():
             comment_form.instance.email = request.user.email
             comment_form.instance.name = request.user.username
-            try:
-                parent_id = int(request.POST.get('parent_id'))
-            except:
-                parent_id = None
-            if parent_id:
-                parent_qs = Comment.objects.filter(parent__id=parent_id)
-                if parent_qs.exists():
-                    parent_obj = parent_qs.first()
             comment = comment_form.save(commit=False)
             comment.post = post
             comment.save()
@@ -101,6 +93,9 @@ class UpdateCommentView(UpdateView):
     template_name = 'edit_comment.html'
     fields = ("body", )
 
+    def get_success_url(self): # Got help with this function from tutor 'Ger' from code institute
+        return reverse('post_detail', kwargs={'slug': self.object.post.slug})
+
     def get(self, request, slug, *args, **kwargs):
         return render(
             request,
@@ -110,7 +105,11 @@ class UpdateCommentView(UpdateView):
             },
         )
 
-    def post(self, request, pk, slug, *args, **kwargs):
+    def put(self, request, pk, slug, *args, **kwargs):
         comment = get_object_or_404(Comment, pk=pk)
-        
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            comment.save()
+        else:
+            comment_form = CommentForm()
         return HttpResponseRedirect(reverse('post_detail', args=[slug]))
