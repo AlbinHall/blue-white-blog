@@ -28,7 +28,7 @@
 
     <!--Media-->
     <link rel="stylesheet" href="{% static 'media' %}">
-    <title>Älgarna</title>
+    <title>BlueWhite FanBlog</title>
 </head>
 
 <body class="d-flex flex-column h-100 main-bg">
@@ -42,6 +42,11 @@
 
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                {% if user.is_authenticated %}
+                <li class="nav-item text-right">
+                    <a class="nav-link" href="{% url 'send_email' %}">Contact us |</a>
+                </li>
+                {% endif %}
                 <li class="nav-item">
                     <a href="{% url 'home' %}" class="nav-link">Posts | </a>
                 </li>
@@ -56,9 +61,6 @@
                 <li class="nav-item text-right">
                     <a class="nav-link" href="{% url 'account_login' %}">Login |</a>
                 </li>
-                <li class="nav-item text-right">
-                    <a class="nav-link" href="{% url 'send_email' %}">Contact us |</a>
-                </li>
                 {% endif %}
             </ul>
         </div>
@@ -69,8 +71,10 @@
     <footer class="footer mt-4 w-100" style="background-color: #234b9a;">
         <div class="row justify-content-center">
             <div class="col-md-12 w-100">
+                {% if user.is_authenticated %}
                 <p class="text-center" style="color: white;">Contacts us <a href="{% url 'send_email' %}"
                         class="navbar-brand">here</a></p>
+                {% endif %}
             </div>
         </div>
     </footer>
