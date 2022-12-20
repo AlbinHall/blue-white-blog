@@ -1,4 +1,11 @@
 /*overwriting styling of navbar */
+h1, h2, h3, h4, h5 {
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
 
 .navbar .navbar-brand {
     color: white;

@@ -34,7 +34,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col card mb-4  mt-3 left  top">
+        <div class="col card mb-4  mt-3 left bg-light top">
             <div class="card-body">
 
                 <p class="card-text ">
@@ -80,7 +80,7 @@
     {% else %}
     {% for comment in post.comments.all %}
     <div class="row">
-        <div class="col-md-12 card-body mb-4 mt-3 border border-dark rounded">
+        <div class="col-md-12 card-body mb-4 mt-3 border border-dark rounded bg-light">
             <h5 class="card-title">{{ comment.name }} | {{ comment.created_on }} </h5>
             <p class="card-text">{{ comment.body }}</p>
             {% if comment.name == user.username %}
