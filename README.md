@@ -18,44 +18,76 @@ The site is built via github/django
 - The site user can send email to the owner of the page via a link in the foter
     - The site user may have some useful informationn about improvement of the site etc
     - the site user may want to be a writer of posts  
+    - The email is only connected to mailtrap for testing as I dont want any mail to my adress
 
 ### Existing Features
 
-- __The Love Maths Logo and Heading__
+- __The starting page nav__
 
-  - Featured at the top of the page, the Love Maths logo and heading is easy to see for the user. Upon viewing the page, the user will be able to see the name of the game.
+  - The navbar is made with bootstrap class and contains links so the user can login/logout/register
+    - For logged in users there will be an option to reach out to page owner via mail
+    - The loggedin user will be able to se their name under the navbar
 
 ![Logo](media/love_maths_logo.png)
 
-- __The Game Area__
+- __The scrollable post page__
 
-  - This section will allow the user to play the maths game. The user will be able to easily see icons for addition,  subtraction, multiplication, and division games.
-  - The user will be able to select the type of maths game they will be playing by clicking on the different icons. 
+  - The site user can scroll through all the different post that is available
+    - Only loggedin users will be able to click in to the posts and comment/like
 
-![Game](media/love_maths_icons.png)
+![Game](me)
 
-- __The Question section__
+- __The Footer__
 
-  - The question section is where the user will be able to see the elementary arithmetic question to answer as part of the game. The user will be able answer the questions in the answer box provide
-  - The user will be able to submit their answer and a pop-up will make it known to the user if they answered correctly. 
+  - The footer will contain content for the logged in user
+  - The footer will exand in height as the page content decreases to give the page more styling
 
 ![Question](media/love_maths_question.png)
 
-- __The Score Area__
+- __Inside the post view__
 
-  - This section will allow the user to see exactly how many correct and incorrect answers they have provided. 
+  - This page will let authenticated users to comment/read/like the post. 
 
 ![score](media/love_maths_answer.png)
 
-For some/all of your features, you may choose to reference the specific project files that implement them.
+- __The comments__
 
-In addition, you may also use this section to discuss plans for additional features to be implemented in the future:
+  - Users will be able to create,delete,edit and view their comments for every post
+
+- __The Login__
+
+  - User will be able to create their own user with username and password
+    - The user can choose to login via their github account
+
 
 ### Features Left to Implement
 
-- Another feature idea
+- Comment thread page
+  - The site user can start a comment thread to discuss their opinions on certain matters
+
+- More social account login providers
+
+- User who is authenticated and got the right permission can create posts 
+  - give some users the ability to create posts without entering the admin panel
 
 ## Testing 
+
+The testing has been done manually both under the development process but also after the product was finnished developed
+
+- __Manually testing that has been done__
+  - Check so that users can't create accounts/send email without adding the correct information
+  - Check so that the site users that is not authenticated can visist the blog posts
+    - This has been made so that the un autherised site user can visit the first page but a modal will apear when clicking the posts
+  - Check so that authenticated users can't change or delete comments they havent made them self
+  - Check so that all the colors works well togheter and does not disturb the user
+  - Check so that messages appear to the user when something has been deleted/created or when the user login/logout etc
+  - Check so that the send email function works and dont allow harmful content or whitespace for name
+  - Check so that the mobile version of the site works well and look good
+
+- __Bugs__
+  - The message for completed editing of comment does not work propperly
+  - Whitespace allowed for send email name (Fixed)
+  
 
 In this section, you need to convince the assessor that you have conducted enough testing to legitimately believe that the site works well. Essentially, in this part you will want to go over all of your project’s features and ensure that they all work as intended, with the project providing an easy and straightforward way for the users to achieve their goals.
 
@@ -88,9 +120,9 @@ You will need to mention unfixed bugs and why they were not fixed. This section 
 
 This section should describe the process you went through to deploy the project to a hosting platform (e.g. GitHub) 
 
-- The site was deployed to GitHub pages. The steps to deploy are as follows: 
-  - In the GitHub repository, navigate to the Settings tab 
-  - From the source section drop-down menu, select the Master Branch
+- The site was deployed to Heroku. The steps to deploy are as follows: 
+  - In the Heroku app, navigate to the create new app 
+  - The app was created 
   - Once the master branch has been selected, the page will be automatically refreshed with a detailed ribbon display to indicate the successful deployment. 
 
 The live link can be found here - https://code-institute-org.github.io/love-maths/
