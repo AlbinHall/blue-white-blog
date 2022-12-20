@@ -49,12 +49,15 @@ class PostDetail(View):
             liked = True
 
         comment_form = CommentForm(data=request.POST)
-        messages.add_message(request, messages.INFO, 'Successful Comment Request!')
+        messages.add_message(request, messages.INFO, 'You have leaved a comment!')
         if comment_form.is_valid():
             comment_form.instance.email = request.user.email
             comment_form.instance.name = request.user.username
             comment = comment_form.save(commit=False)
             comment.post = post
+            parent_id = comment_form.cleaned_data['parent']
+            if parent_id:
+                comment.parent = Comment.objects.get(id=parent_id)
             comment.save()
         else:
             comment_form = CommentForm()
@@ -114,7 +117,6 @@ class UpdateCommentView(UpdateView):
         if comment.name == request.user.username:
             if comment_form.is_valid():
                 comment.save()
-                messages.add_message(request, messages.SUCCESS, 'Comment Updated!')
             else:
                 comment_form = CommentForm()
         else:
@@ -122,7 +124,7 @@ class UpdateCommentView(UpdateView):
         return HttpResponseRedirect(reverse('post_detail', args=[slug]))
 
 
-def send_email(request):
+def send_email(request):  # https://www.youtube.com/watch?v=dnhEnF7_RyM&ab_channel=CodeWithStein
     form = ContactForm()
 
     if request.method == 'POST':
@@ -133,6 +135,7 @@ def send_email(request):
             email = form.cleaned_data['email']
             content = form.cleaned_data['content']
 
+            messages.add_message(request, messages.SUCCESS, 'Your email is now sent!')
             html = render_to_string('send_email_form.html', {
                 'name': name,
                 'email': email,

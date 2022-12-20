@@ -44,7 +44,7 @@ class Comment(models.Model):
     body = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
     approved = models.BooleanField(default=False)
-    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='replies')
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='childrens')
 
     class Meta:
         ordering = ["created_on"]
@@ -58,4 +58,4 @@ class Comment(models.Model):
 
 class Profile(models.Model):
     profile = models.OneToOneField(User, on_delete=models.CASCADE)
-    
+

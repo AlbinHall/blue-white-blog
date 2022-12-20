@@ -3,9 +3,19 @@
 {% block content %}
 {% if user.is_authenticated %}
 
-
+{% if messages %}
 <div class="row justify-content-center">
-    <div class="cold-md-6 p-4 w-50 card">
+    {% for message in messages %}
+    <div class="col-md-6 mt-3 w-50">
+        <div class="alert alert-primary">
+            {{ message.message }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+<div class="row justify-content-center">
+    <div class="cold-md-6 mt-3 p-4 w-50 card">
         <h3 class="p-4">Send us an email!</h3>
         <form method="post" action="." class="" style="margin-top: 1.3em;">
             {{ form | crispy }}

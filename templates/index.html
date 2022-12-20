@@ -9,7 +9,17 @@
         </p>
         <div>
 </header>
-
+{% if messages %}
+<div class="row justify-content-center">
+    {% for message in messages %}
+    <div class="col-md-6 mt-3 w-50">
+        <div class="alert alert-primary">
+            {{ message.message }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
 <div class="container">
     <div class="row">
 

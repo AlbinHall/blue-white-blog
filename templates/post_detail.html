@@ -20,6 +20,17 @@
         </div>
     </div>
 </div>
+{% if messages %}
+<div class="row justify-content-center">
+    {% for message in messages %}
+    <div class="col-md-6 mt-3 w-50 text-center">
+        <div class="alert alert-primary">
+            {{ message.message }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
 
 <div class="container">
     <div class="row">
@@ -72,34 +83,35 @@
             <h5 class="card-title">{{ comment.name }} | {{ comment.created_on }} </h5>
             <p class="card-text">{{ comment.body }}</p>
             {% if comment.name == user.username %}
-            <a href="{% url 'delete_comment' pk=comment.id slug=post.slug %}" class="btn btn-outline-danger">Delete</a>
-            <a href="{% url 'edit_comment' pk=comment.id slug=post.slug %}" class="btn btn-outline-primary">Edit</a>
+            <a href="{% url 'delete_comment' pk=comment.id slug=post.slug %}" class="btn btn-outline-danger m-1">Delete</a>
+            <a href="{% url 'edit_comment' pk=comment.id slug=post.slug %}" class="btn btn-outline-primary m-1">Edit</a>
             {% endif %}
         </div>
     </div>
 
     {% endfor %}
     {% endif %}
-</div>
-<div class="col-md-12 card mb-4  mt-3 ">
-    <div class="card-body">
-        <!-- For later -->
-        {% if commented %}
-        <div class="alert alert-success" role="alert">
-            Your comment is awaiting approval
-        </div>
-        {% else %}
-        {% if user.is_authenticated %}
+    <div class="row justify-content-center">
+        <div class="col-md-12 card mb-4  mt-3 ">
+            <div class="card-body">
+                <!-- For later -->
+                {% if commented %}
+                <div class="alert" role="alert">
+                    Your comment is awaiting approval
+                </div>
+                {% else %}
+                {% if user.is_authenticated %}
 
-        <h3>Leave a comment:</h3>
-        <p>Posting as: {{ user.username }}</p>
-        <form method="post" class="" style="margin-top: 1.3em;">
-            {{ comment_form | crispy }}
-            {% csrf_token %}
-            <button type="submit" class="btn btn-success btn-lg">Submit</button>
-        </form>
-        {% endif %}
-        {% endif %}
+                <h3>Leave a comment:</h3>
+                <p>Posting as: {{ user.username }}</p>
+                <form method="post" class="" style="margin-top: 1.3em;">
+                    {{ comment_form | crispy }}
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success btn-lg">Submit</button>
+                </form>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
     </div>
-</div>
-{% endblock content %}
+    {% endblock content %}
