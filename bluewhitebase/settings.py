@@ -32,7 +32,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['blue-white-blog.herokuapp.com', 'localhost']
 
-EMAIL_HOST = 'smtp.mailtrap.io'
+
+# email tester from mailtrap
+EMAIL_HOST = 'smtp.mailtrap.io' 
 EMAIL_HOST_USER = '23ffd3d90c3e2a'
 EMAIL_HOST_PASSWORD = 'a44c8da68a0e9b'
 EMAIL_PORT = '2525'

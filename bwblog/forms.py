@@ -10,7 +10,7 @@ class CommentForm(forms.ModelForm):
         fields = ["body", 'parent']
 
 
-class ContactForm(forms.Form):
+class ContactForm(forms.Form):  # email contact form 
     name = forms.CharField(max_length=100)
     email = forms.EmailField()
     content = forms.CharField(widget=forms.Textarea)

@@ -4,13 +4,12 @@
     <div class="container">
         <div class="row g-0">
             <div class="col-md-12 masthead-text text-center">
-                <!-- Post title goes in these h1 tags -->
+                <!--information such as title and author of post-->
                 <h1 class="post-title">{{ post.title }}</h1>
-                <!-- Post author goes before the | the post's created date goes after -->
                 <p class="post-subtitle">{{ post.author }} | {{ post.created_on }}</p>
             </div>
             <div class=" d-md-block col-md-12 masthead-image">
-                <!-- The featured image URL goes in the src attribute -->
+                <!-- blogpost picture -->
                 {% if "placeholder" in post.featured_image.url %}
                 <img src="https://picsum.photos/200" width="100%">
                 {% else %}
@@ -20,6 +19,7 @@
         </div>
     </div>
 </div>
+<!--messages displaying in case of interaction that gives message-->
 {% if messages %}
 <div class="row justify-content-center">
     {% for message in messages %}
@@ -41,7 +41,7 @@
                     {{ post.content | safe }}
                 </p>
                 <div class="row">
-
+<!--like and unlike function-->
                     <div class="col-1">
                         <strong>
                             {% if user.is_authenticated %}
@@ -57,9 +57,9 @@
                                 {% endif %}
                             </form>
                             {% else %}
-                            <span class="text-secondary"><i class="far fa-heart"></i></span>
+                            <span class="text-secondary"><i class="fa-regular fa-thumbs-up"></i></span>
                             {% endif %}
-                            <!-- The number of likes goes before the closing strong tag -->
+                            <!-- displaying number of likes the post has -->
                             <span class="text-secondary">{{ post.number_of_likes }} </span>
                         </strong>
                     </div>
@@ -72,6 +72,7 @@
             <hr>
         </div>
     </div>
+    <!-- displaying comments-->
     <h3> {{ comments.count }} Comments:</h3>
     <br>
     {% if not post.comments.all %}
@@ -91,6 +92,7 @@
 
     {% endfor %}
     {% endif %}
+    <!--The comment form for authenticated users-->
     <div class="row justify-content-center">
         <div class="col-md-12 card mb-4  mt-3 ">
             <div class="card-body">

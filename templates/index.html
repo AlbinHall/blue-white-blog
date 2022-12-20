@@ -9,6 +9,7 @@
         </p>
         <div>
 </header>
+<!-- displaying messages if message is found from view-->
 {% if messages %}
 <div class="row justify-content-center">
     {% for message in messages %}
@@ -23,7 +24,7 @@
 <div class="container">
     <div class="row">
 
-        <!-- Blog Entries Column -->
+        <!-- sections that displayes the posts -->
         <div class="col-12 mt-4">
             <div class="row">
                 {% for post in post_list %}
@@ -67,6 +68,7 @@
             </div>
         </div>
     </div>
+    <!-- paginated if post > 3-->
     {% if is_paginated %}
     <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
@@ -81,7 +83,7 @@
     {% endif %}
 </div>
 
-<!-- Modal that pops-up if user is not autheticated -->
+<!-- Modal that pops-up if user is not autheticated and tries to access the post_detail-->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -93,7 +95,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                If You Dont Already Have An Account You Can Sign Up By Clicking At The Sign Up Button!
+                If you don't already have An account you can sign up by clicking at the sign up button!
             </div>
             <div class="modal-footer">
                 <a href="{% url 'account_login' %}" class="btn btn-success">Login</a>
