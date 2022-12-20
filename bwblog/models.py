@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 from cloudinary.models import CloudinaryField
 import datetime
 
@@ -53,3 +54,8 @@ class Comment(models.Model):
 
     def number_of_comments(self):
         return self.comments.count()
+
+
+class Profile(models.Model):
+    profile = models.OneToOneField(User, on_delete=models.CASCADE)
+    

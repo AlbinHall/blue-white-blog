@@ -32,6 +32,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['blue-white-blog.herokuapp.com', 'localhost']
 
+EMAIL_HOST = 'smtp.mailtrap.io'
+EMAIL_HOST_USER = '23ffd3d90c3e2a'
+EMAIL_HOST_PASSWORD = 'a44c8da68a0e9b'
+EMAIL_PORT = '2525'
 
 # Application definition
 
@@ -45,6 +49,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'allauth.socialaccount.providers.github',
     'cloudinary_storage',
     'django.contrib.staticfiles',
     'cloudinary',
@@ -59,9 +64,25 @@ SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'github': {
+        'SCOPE': [
+            'user',
+            'repo',
+            'read:org',
+        ],
+    }
+}
+
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-info',

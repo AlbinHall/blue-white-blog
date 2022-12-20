@@ -1,11 +1,13 @@
-from django.shortcuts import render, get_object_or_404, reverse
+from django.shortcuts import render, get_object_or_404, reverse, redirect
+from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from django.views import generic, View
 from django.http import HttpResponseRedirect
 from .models import Post, Comment
-from .forms import CommentForm
+from .forms import CommentForm, ContactForm
 from django.contrib import messages
 from django.views.generic import UpdateView, DeleteView
+from django.template.loader import render_to_string
 
 
 class PostList(generic.ListView):
@@ -71,6 +73,7 @@ class PostLike(View):
 
         return HttpResponseRedirect(reverse('post_detail', args=[slug]))
 
+
 # got help from Tutor at code institute with DeleteCommentView
 
 
@@ -117,3 +120,37 @@ class UpdateCommentView(UpdateView):
         else:
             messages.add_message(request, messages.ERROR, 'You can only update your own comment!')
         return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+
+
+def send_email(request):
+    form = ContactForm()
+
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            content = form.cleaned_data['content']
+
+            html = render_to_string('send_email_form.html', {
+                'name': name,
+                'email': email,
+                'content': content,
+            })
+
+            send_mail(
+                'Subject here',
+                'Here is the message.',
+                'albin@betterproduction.se',
+                ['albin-hall1@hotmail.com'], html_message=html
+                )           
+            return redirect('send_email')
+        else:
+            form = ContactForm()
+
+
+    return render(request, 'send_email.html', {
+        'form': form
+    })
+    

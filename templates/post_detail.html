@@ -37,9 +37,12 @@
                             <form class="d-inline" action="{% url 'post_like' post.slug %}" method="POST">
                                 {% csrf_token %}
                                 {% if liked %}
-                                <button type="submit" class="btn btn-secondary" name="blogpost_id" value="{{post.slug}}" class="btn-like"><i class="fa-solid fa-thumbs-up"></i></button>
+                                <button type="submit" class="btn btn-secondary" name="blogpost_id" value="{{post.slug}}"
+                                    class="btn-like"><i class="fa-solid fa-thumbs-up"></i></button>
                                 {% else %}
-                                <button type="submit" class="btn btn-outline-secondary" name="blogpost_id" value="{{post.slug}}" class="btn-like"><i class="fa-regular fa-thumbs-up"></i></button>
+                                <button type="submit" class="btn btn-outline-secondary" name="blogpost_id"
+                                    value="{{post.slug}}" class="btn-like"><i
+                                        class="fa-regular fa-thumbs-up"></i></button>
                                 {% endif %}
                             </form>
                             {% else %}
@@ -75,8 +78,8 @@
         </div>
     </div>
 
-        {% endfor %}
-        {% endif %}
+    {% endfor %}
+    {% endif %}
 </div>
 <div class="col-md-12 card mb-4  mt-3 ">
     <div class="card-body">
@@ -90,7 +93,7 @@
 
         <h3>Leave a comment:</h3>
         <p>Posting as: {{ user.username }}</p>
-        <form method="post" style="margin-top: 1.3em;">
+        <form method="post" class="" style="margin-top: 1.3em;">
             {{ comment_form | crispy }}
             {% csrf_token %}
             <button type="submit" class="btn btn-success btn-lg">Submit</button>

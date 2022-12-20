@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% if user.is_authenticated %}
+
+
+<div class="row justify-content-center">
+    <div class="cold-md-6 p-4 w-50 card">
+        <h3 class="p-4">Send us an email!</h3>
+        <form method="post" action="." class="" style="margin-top: 1.3em;">
+            {{ form | crispy }}
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success btn-lg">Submit</button>
+        </form>
+        <div>
+        </div>
+        {% endif %}{% endblock %}
