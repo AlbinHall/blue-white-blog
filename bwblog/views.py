@@ -151,6 +151,8 @@ def send_email(request):  # https://www.youtube.com/watch?v=dnhEnF7_RyM&ab_chann
             return redirect('send_email')
         else:
             form = ContactForm()
+            messages.add_message(request, messages.ERROR, 'Enter a valid name!')
+
 
 
     return render(request, 'send_email.html', {

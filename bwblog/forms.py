@@ -15,4 +15,8 @@ class ContactForm(forms.Form):  # email contact form
     email = forms.EmailField()
     content = forms.CharField(widget=forms.Textarea)
 
+    def clean_description(self):
+        if not self.cleaned_data['name'].str.strip():
+            raise forms.ValidationError('Enter a valid name!')
+
 
