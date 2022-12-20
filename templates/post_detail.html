@@ -41,7 +41,7 @@
                     {{ post.content | safe }}
                 </p>
                 <div class="row">
-<!--like and unlike function-->
+                    <!--like and unlike function-->
                     <div class="col-1">
                         <strong>
                             {% if user.is_authenticated %}
@@ -79,12 +79,13 @@
     Be the first To Write a comment!
     {% else %}
     {% for comment in post.comments.all %}
-    <div class="row">
-        <div class="col-md-12 card-body mb-4 mt-3 border border-dark rounded bg-light">
+    <div class="row justify-content-center">
+        <div class="col-md-12 card-body m-4 mt-3 border border-dark rounded bg-light">
             <h5 class="card-title">{{ comment.name }} | {{ comment.created_on }} </h5>
             <p class="card-text">{{ comment.body }}</p>
             {% if comment.name == user.username %}
-            <a href="{% url 'delete_comment' pk=comment.id slug=post.slug %}" class="btn btn-outline-danger m-1">Delete</a>
+            <a href="{% url 'delete_comment' pk=comment.id slug=post.slug %}"
+                class="btn btn-outline-danger m-1">Delete</a>
             <a href="{% url 'edit_comment' pk=comment.id slug=post.slug %}" class="btn btn-outline-primary m-1">Edit</a>
             {% endif %}
         </div>
@@ -94,7 +95,7 @@
     {% endif %}
     <!--The comment form for authenticated users-->
     <div class="row justify-content-center">
-        <div class="col-md-12 card mb-4  mt-3 ">
+        <div class="col-md-6 card mb-4  mt-3 ">
             <div class="card-body">
                 <!-- For later -->
                 {% if commented %}
@@ -116,4 +117,5 @@
             </div>
         </div>
     </div>
-    {% endblock content %}
+</div>
+{% endblock %}

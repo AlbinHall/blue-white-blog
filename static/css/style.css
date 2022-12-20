@@ -1,4 +1,8 @@
 /*overwriting styling of navbar */
+html,body{
+    overflow-x: hidden;
+}
+
 h1, h2, h3, h4, h5 {
     font-family: 'Roboto Condensed', sans-serif;
 }
@@ -24,5 +28,9 @@ body {
 
 h1 {
     padding-top: 20px;
+}
+
+footer {
+    height: 80vh;
 }
 
