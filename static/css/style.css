@@ -33,4 +33,12 @@ h1 {
 footer {
     height: 80vh;
 }
+/* show username */
+.custom-p {
+    font-size: xx-small;
+    color: grey;
+}
 
+.footer-text {
+    color: white;
+}

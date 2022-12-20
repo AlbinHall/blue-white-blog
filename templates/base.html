@@ -1,4 +1,5 @@
-{% load static %}
+{% load static %} {% load account %}
+
 <!DOCTYPE html>
 <html lang="en" class="h-100">
 
@@ -43,28 +44,36 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {% if user.is_authenticated %}
-                <li class="nav-item text-right">
+                <li class="nav-item text-left">
                     <a class="nav-link" href="{% url 'send_email' %}">Contact us |</a>
                 </li>
                 {% endif %}
-                <li class="nav-item">
+                <li class="nav-item text-left">
                     <a href="{% url 'home' %}" class="nav-link">Posts | </a>
                 </li>
                 {% if user.is_authenticated %}
-                <li class="nav-item text-right">
+                <li class="nav-item text-left">
                     <a class="nav-link" href="{% url 'account_logout' %}">Logout | </a>
                 </li>
                 {% else %}
-                <li class="nav-item text-right">
+                <li class="nav-item text-left">
                     <a class="nav-link" href="{% url 'account_signup' %}">Register | </a>
                 </li>
-                <li class="nav-item text-right">
+                <li class="nav-item text-left">
                     <a class="nav-link" href="{% url 'account_login' %}">Login |</a>
                 </li>
                 {% endif %}
             </ul>
         </div>
     </nav>
+    {% if user.is_authenticated %}
+    <div class="row justify-content-left">
+        <div class="col-md-2">
+            {% user_display user as name %}
+            <p class="text-left ml-1 custom-p">logged in as: <b>{{ name }}</b></p>
+        </div>
+    </div>
+    {% endif %}
     <!--Start of content for other templates-->
     {% block content%}
     {% endblock %}
@@ -72,9 +81,9 @@
         <div class="row justify-content-center">
             <div class="col-md-12 w-100">
                 {% if user.is_authenticated %}
-                <p class="text-center" style="color: white;">Contacts us <a href="{% url 'send_email' %}"
+                <p class="text-center footer-text">Contacts us <a href="{% url 'send_email' %}"
                         class="navbar-brand">here</a></p>
-                {% endif %}
+                        {% endif %}
             </div>
         </div>
     </footer>
