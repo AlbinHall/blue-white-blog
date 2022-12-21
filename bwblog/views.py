@@ -77,9 +77,6 @@ class PostLike(View):
         return HttpResponseRedirect(reverse('post_detail', args=[slug]))
 
 
-# got help from Tutor at code institute with DeleteCommentView
-
-
 class DeleteCommentView(DeleteView):
     model = Comment
     template_name = 'confirm_delete.html'
@@ -124,7 +121,7 @@ class UpdateCommentView(UpdateView):
         return HttpResponseRedirect(reverse('post_detail', args=[slug]))
 
 
-def send_email(request):  # https://www.youtube.com/watch?v=dnhEnF7_RyM&ab_channel=CodeWithStein
+def send_email(request):
     form = ContactForm()
 
     if request.method == 'POST':
