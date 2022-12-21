@@ -116,10 +116,8 @@ class UpdateCommentView(UpdateView):
                 comment.save()
             else:
                 comment_form = CommentForm()
-        else:
-            messages.add_message(request, messages.ERROR, 'You can only update your own comment!')
         return HttpResponseRedirect(reverse('post_detail', args=[slug]))
-
+   
 
 def send_email(request):
     form = ContactForm()
