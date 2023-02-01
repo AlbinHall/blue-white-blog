@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.views import generic, View
 from django.http import HttpResponseRedirect
 from .models import Post, Comment
-from .forms import CommentForm, ContactForm
+from .forms import CommentForm, ContactForm, DiscussionForm, CommentFormDisc
 from django.contrib import messages
 from django.views.generic import UpdateView, DeleteView
 from django.template.loader import render_to_string
@@ -153,4 +153,39 @@ def send_email(request):
     return render(request, 'send_email.html', {
         'form': form
     })
-    
+
+
+def discussion_list(request):
+    discussions = Discussion.objects.all().order_by('-date_created')
+    return render(request, 'discussions/discussion_list.html', {'discussions': discussions})
+
+
+def discussion_detail(request, pk):
+    discussion = get_object_or_404(Discussion, pk=pk)
+    comments = discussion.comment_set.all()
+    if request.method == 'POST':
+        form = CommentFormDisc(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.discussion = discussion
+            comment.author = request.user
+            parent_id = request.POST.get('parent_id')
+            if parent_id:
+                comment.parent = CommentDisc.objects.get(id=parent_id)
+            comment.save()
+    else:
+        form = CommentForm()
+    return render(request, 'discussions/discussion_detail.html', {'discussion': discussion, 'comments': comments, 'form': form})
+
+def discussion_create(request):
+    if request.method == 'POST':
+        form = DiscussionForm(request.POST)
+        if form.is_valid():
+            discussion = form.save(commit=False)
+            discussion.author = request.user
+            discussion.save()
+            return redirect('discussion_detail', pk=discussion.pk)
+    else:
+        form = DiscussionForm()
+    return render(request, 'discussions/discussion_create.html', {'form': form})
+

@@ -1,4 +1,4 @@
-from .models import Comment, Profile
+from .models import Comment, Profile, Discussion, CommentDisc
 from django import forms
 
 
@@ -19,4 +19,17 @@ class ContactForm(forms.Form):  # email contact form
         if not self.cleaned_data['name'].str.strip():
             raise forms.ValidationError('Enter a valid name!')
 
+
+class DiscussionForm(forms.ModelForm):
+    class Meta:
+        model = Discussion
+        fields = ['title', 'description']
+       
+
+class CommentFormDisc(forms.ModelForm):
+    parent_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+
+    class Meta:
+        model = CommentDisc
+        fields = ['text']
 

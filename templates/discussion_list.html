@@ -1,0 +1,37 @@
+{% extends 'base.html' %} {% block content %}
+{% for comment in comments %}
+    <div class="comment">
+        {{ comment.text }}
+        <br>
+        by {{ comment.author }}
+        <br>
+        <a href="#" class="reply-link" data-id="{{ comment.id }}">Reply</a>
+        {% if not comment.parent %}
+            {% for reply in comment.comment_set.all %}
+                <div class="reply">
+                    {{ reply.text }}
+                    <br>
+                    by {{ reply.author }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endfor %}
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Post">
+</form>
+
+<script>
+    $(document).ready(function() {
+        $('.reply-link').click(function(e) {
+            e.preventDefault();
+            var parentId = $(this).data('id');
+            $('#id_parent_id').val(parentId);
+        });
+    });
+</script>
+{% endblock %}
+
