@@ -3,7 +3,7 @@ from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from django.views import generic, View
 from django.http import HttpResponseRedirect
-from .models import Post, Comment
+from .models import Post, Comment, CommentDisc, Discussion
 from .forms import CommentForm, ContactForm, DiscussionForm, CommentFormDisc
 from django.contrib import messages
 from django.views.generic import UpdateView, DeleteView
@@ -157,7 +157,7 @@ def send_email(request):
 
 def discussion_list(request):
     discussions = Discussion.objects.all().order_by('-date_created')
-    return render(request, 'discussions/discussion_list.html', {'discussions': discussions})
+    return render(request, 'discussion_list.html', {'discussions': discussions})
 
 
 def discussion_detail(request, pk):
@@ -174,8 +174,8 @@ def discussion_detail(request, pk):
                 comment.parent = CommentDisc.objects.get(id=parent_id)
             comment.save()
     else:
-        form = CommentForm()
-    return render(request, 'discussions/discussion_detail.html', {'discussion': discussion, 'comments': comments, 'form': form})
+        form = CommentFormDisc()
+    return render(request, 'discussion_detail.html', {'discussion': discussion, 'comments': comments, 'form': form})
 
 def discussion_create(request):
     if request.method == 'POST':
@@ -187,5 +187,5 @@ def discussion_create(request):
             return redirect('discussion_detail', pk=discussion.pk)
     else:
         form = DiscussionForm()
-    return render(request, 'discussions/discussion_create.html', {'form': form})
+    return render(request, 'discussion_create.html', {'form': form})
 
