@@ -59,3 +59,23 @@ class Comment(models.Model):
 class Profile(models.Model):
     profile = models.OneToOneField(User, on_delete=models.CASCADE)
 
+# Models for the discussion page
+class Discussion(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    date_created = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.title
+
+
+class CommentDisc(models.Model):
+    text = models.TextField()
+    date_created = models.DateTimeField(auto_now_add=True)
+    discussion = models.ForeignKey(Discussion, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.text
