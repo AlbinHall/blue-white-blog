@@ -69,13 +69,12 @@ class Discussion(models.Model):
     def __str__(self):
         return self.title
 
-
 class CommentDisc(models.Model):
     text = models.TextField()
     date_created = models.DateTimeField(auto_now_add=True)
-    discussion = models.ForeignKey(Discussion, on_delete=models.CASCADE)
+    discussion = models.ForeignKey(Discussion, on_delete=models.CASCADE, related_name='comments')
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
-    
+
     def __str__(self):
         return self.text

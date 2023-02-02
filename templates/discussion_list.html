@@ -1,37 +1,14 @@
 {% extends 'base.html' %} {% block content %}
-{% for comment in comments %}
-    <div class="comment">
-        {{ comment.text }}
-        <br>
-        by {{ comment.author }}
-        <br>
-        <a href="#" class="reply-link" data-id="{{ comment.id }}">Reply</a>
-        {% if not comment.parent %}
-            {% for reply in comment.comment_set.all %}
-                <div class="reply">
-                    {{ reply.text }}
-                    <br>
-                    by {{ reply.author }}
-                </div>
-            {% endfor %}
-        {% endif %}
-    </div>
+<h2>Discussions</h2>
+{% for discussion in discussions %}
+<div class="discussion">
+    <h3>{{ discussion.title }}</h3>
+    <p>{{ discussion.description }}</p>
+    <p>Author: {{ discussion.author }}</p>
+    <p>Date Created: {{ discussion.date_created }}</p>
+    <a href="{% url 'discussion_detail' discussion.pk %}">View Discussion</a>
+</div>
 {% endfor %}
-
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Post">
-</form>
-
-<script>
-    $(document).ready(function() {
-        $('.reply-link').click(function(e) {
-            e.preventDefault();
-            var parentId = $(this).data('id');
-            $('#id_parent_id').val(parentId);
-        });
-    });
-</script>
+<a href="{% url 'discussion_create' %}">Create a New Discussion</a>
 {% endblock %}
 

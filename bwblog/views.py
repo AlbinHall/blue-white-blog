@@ -162,7 +162,7 @@ def discussion_list(request):
 
 def discussion_detail(request, pk):
     discussion = get_object_or_404(Discussion, pk=pk)
-    comments = discussion.comment_set.all()
+    comments = discussion.comments.all()
     if request.method == 'POST':
         form = CommentFormDisc(request.POST)
         if form.is_valid():

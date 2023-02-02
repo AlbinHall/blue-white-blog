@@ -1,0 +1,25 @@
+{% extends 'base.html' %} {% block content %}
+{% load crispy_forms_tags %}
+<h2>{{ discussion.title }}</h2>
+<p>{{ discussion.description }}</p>
+<p>Author: {{ discussion.author }}</p>
+<p>Date Created: {{ discussion.date_created }}</p>
+
+<h3>Comments</h3>
+{% for comment in comments %}
+<div class="comment">
+    <p>{{ comment.text }}</p>
+    <p>Author: {{ comment.author }}</p>
+    <p>Date Created: {{ comment.date_created }}</p>
+</div>
+{% endfor %}
+
+<h3>Add a Comment</h3>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit">
+</form>
+<a href="{% url 'discussion_list' %}">Back to discussion list</a>
+{% endblock %}
+
