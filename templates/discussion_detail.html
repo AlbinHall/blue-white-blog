@@ -1,73 +1,62 @@
-
 {% extends 'base.html' %}
 {% block content %}
-{% load crispy_forms_tags %}
 
 <h2>{{ discussion.title }}</h2>
 <p>{{ discussion.description }}</p>
-<p>Author: {{ discussion.author }}</p>
-<p>Date Created: {{ discussion.date_created }}</p>
-
+<hr>
 <h3>Comments</h3>
-{% for comment in comments %}
-<div class="comment">
-    <p>{{ comment.text }}</p>
-    <p>Author: {{ comment.author }}</p>
-    <p>Date Created: {{ comment.date_created }}</p>
-    
-    <!-- Collapse to show replies if there are any -->
-    {% if comment.replies.all %}
-    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapse-{{ comment.id }}">
-        Replies
-    </button>
-    <div id="collapse-{{ comment.id }}" class="collapse">
-        {% for reply in comment.replies.all %}
-        <div class="reply">
-            <p>{{ reply.text }}</p>
-            <p>Author: {{ reply.author }}</p>
-            <p>Date Created: {{ reply.date_created }}</p>
-        </div>
+<div id="comments">
+  {% for comment in comments %}
+    <div class="comment">
+      {{ comment.text }}
+      <button class="reply-button" data-comment-id="{{ comment.id }}">Reply</button>
+      <form class="reply-form" data-comment-id="{{ comment.id }}" style="display: none;">
+        <!-- Add the reply form here -->
+      </form>
+      <div class="replies">
+        <!-- Child comments go here -->
+        {% for reply in comment.children.all %}
+          <div class="comment">
+            {{ reply.text }}
+            <button class="reply-button" data-comment-id="{{ reply.id }}">Reply</button>
+            <form class="reply-form" data-comment-id="{{ reply.id }}" style="display: none;">
+              <!-- Add the reply form here -->
+            </form>
+            <div class="replies">
+              <!-- Nested child comments go here -->
+            </div>
+          </div>
         {% endfor %}
+      </div>
     </div>
-    {% endif %}
-    
-    <!-- Form to submit a reply -->
-    <form method="post" class="reply-form">
-        {% csrf_token %}
-        {{ reply_form.text }}
-        <input type="hidden" name="parent_id" value="{{ comment.id }}">
-        <input type="submit" value="Reply">
-    </form>
+  {% endfor %}
 </div>
-{% endfor %}
-
+<hr>
 <h3>Add a Comment</h3>
 <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Save</button>
 </form>
-<a href="{% url 'discussion_list' %}">Back to discussion list</a>
+<script>
+  $(document).on("click", ".reply-button", function() {
+    var commentId = $(this).data("comment-id");
+    $(".reply-form[data-comment-id=" + commentId + "]").toggle();
+  });
+
+  $(document).on("submit", ".reply-form", function(event) {
+    event.preventDefault();
+
+    var form = $(this);
+    var commentId = form.data("comment-id");
+    var commentText = form.find("input[name=text]").val();
+
+    // Send an AJAX request to the server to save the reply
+    $.post("/save-reply/", { comment_id: commentId, text: commentText }, function(data) {
+      // Add the reply to the list of child comments for the parent comment
+      form.before("<div class='comment'>" + commentText + "</div>");
+      form.toggle();
+    });
+  });
+</script>
 {% endblock %}
-
-
-{% for comment in comments %}
-    <div class="comment">
-        <p>{{ comment.text }}</p>
-        <p>Author: {{ comment.author }}</p>
-        <p>Date Created: {{ comment.date_created }}</p>
-
-        {% if comment.children.exists %}
-            <button class="btn btn-primary" data-toggle="collapse" data-target="#{{ comment.id }}">Show Replies</button>
-            <div id="{{ comment.id }}" class="collapse">
-                {% for reply in comment.children.all %}
-                    <div class="reply">
-                        <p>{{ reply.text }}</p>
-                        <p>Author: {{ reply.author }}</p>
-                        <p>Date Created: {{ reply.date_created }}</p>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
-{% endfor %}
