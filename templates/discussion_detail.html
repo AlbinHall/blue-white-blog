@@ -1,35 +1,27 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>{{ discussion.title }}</h2>
+<h2>Discussion: {{ discussion.title }}</h2>
 <p>{{ discussion.description }}</p>
-<hr>
-<h3>Comments</h3>
-<div id="comments">
+<h3>Comments:</h3>
+<ul>
   {% for comment in comments %}
-    <div class="comment">
-      {{ comment.text }}
-      <button class="reply-button" data-comment-id="{{ comment.id }}">Reply</button>
-      <form class="reply-form" data-comment-id="{{ comment.id }}" style="display: none;">
-        <!-- Add the reply form here -->
-      </form>
-      <div class="replies">
-        <!-- Child comments go here -->
-        {% for reply in comment.children.all %}
-          <div class="comment">
-            {{ reply.text }}
-            <button class="reply-button" data-comment-id="{{ reply.id }}">Reply</button>
-            <form class="reply-form" data-comment-id="{{ reply.id }}" style="display: none;">
-              <!-- Add the reply form here -->
-            </form>
-            <div class="replies">
-              <!-- Nested child comments go here -->
-            </div>
-          </div>
+    <li>{{ comment.text }}</li>
+    {% if comment.children.exists %}
+      <ul>
+        {% for child in comment.children.all %}
+          <li>{{ child.text }}</li>
         {% endfor %}
-      </div>
-    </div>
+      </ul>
+    {% endif %}
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="hidden" name="parent_id" value="{{ comment.id }}">
+      <button type="submit">Reply</button>
+    </form>
   {% endfor %}
+</ul>
 </div>
 <hr>
 <h3>Add a Comment</h3>

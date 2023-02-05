@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, Comment, Discussion
+from .models import Post, Comment, Discussion, CommentDisc
 from django_summernote.admin import SummernoteModelAdmin
 
 # Register your models here.
@@ -22,3 +22,10 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ['created_on']
     search_fields = ('name', 'email', 'body')
 
+@admin.register(Discussion)
+class DiscussionAdmin(admin.ModelAdmin):
+    list_display = ('title', 'author', 'date_created')
+
+@admin.register(CommentDisc)
+class CommentDiscAdmin(admin.ModelAdmin):
+    list_display = ('text', 'author', 'discussion', 'date_created')

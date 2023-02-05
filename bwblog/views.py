@@ -173,6 +173,7 @@ def discussion_detail(request, pk):
             if parent_id:
                 comment.parent = CommentDisc.objects.get(id=parent_id)
             comment.save()
+            return redirect('discussion_detail', pk=discussion.pk)
     else:
         form = CommentFormDisc()
     return render(request, 'discussion_detail.html', {'discussion': discussion, 'comments': comments, 'form': form})
