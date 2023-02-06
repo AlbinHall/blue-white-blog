@@ -190,3 +190,13 @@ def discussion_create(request):
         form = DiscussionForm()
     return render(request, 'discussion_create.html', {'form': form})
 
+def delete_comment(request, pk):
+    comment = get_object_or_404(CommentDisc, pk=pk)
+    if request.user == comment.author:
+        comment.delete()
+        messages.add_message(request, messages.SUCCESS, 'Comment deleted!')
+    else:
+        messages.add_message(request, messages.WARNING, 'You can only delete your own comment!')
+
+
+    return redirect('discussion_detail', pk=comment.discussion.pk)

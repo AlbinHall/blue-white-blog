@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 {% block content %} {% load crispy_forms_tags %}
- 
+{% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
 <h2>Discussion: {{ discussion.title }}</h2>
 <p>{{ discussion.description }}</p>
 <h3>Comments:</h3>
@@ -9,6 +16,13 @@
     <div class="card-body">
       <h5 class="card-title">{{ comment.author }}</h5>
       <p class="card-text">{{ comment.text }}</p>
+      {% if request.user == comment.author %}
+  {% csrf_token %}
+  <form action="{% url 'delete_comment' comment.id %}" method="post" id="delete-form-{{ comment.id }}">
+    {% csrf_token %}
+  </form>
+  <input type="button" value="Delete" onclick="confirmDelete({{ comment.id }})">
+{% endif %}
       <a class="btn btn-primary" data-toggle="collapse" href="#reply-form-{{ comment.id }}" role="button" aria-expanded="false" aria-controls="reply-form-{{ comment.id }}">
         Reply
       </a>
@@ -19,7 +33,15 @@
         <div class="collapse" id="child-comments-{{ comment.id }}">
           <ul class="list-group list-group-flush">
             {% for child in comment.children.all %}
-              <li class="list-group-item">{{ child.text }} | {{ child.author }}</li>
+              <li class="list-group-item">{{ child.text }} | {{ child.author }}
+                {% if request.user == child.author %}
+                  {% csrf_token %}
+                  <form action="{% url 'delete_comment' child.id %}" method="post" id="delete-form-{{ child.id }}">
+                    {% csrf_token %}
+                  </form>
+                  <input type="button" value="Delete" onclick="confirmDelete({{ child.id }})">
+                {% endif %}
+              </li>
             {% endfor %}
           </ul>
         </div>
@@ -49,4 +71,12 @@
   {{ form | crispy }}
   <button type="submit">Save</button>
 </form>
+
+<script>
+function confirmDelete(commentId) {
+  if (confirm("Are you sure you want to delete the comment?")) {
+    document.getElementById("delete-form-" + commentId).submit();
+  }
+}
+</script>
 {% endblock %}
