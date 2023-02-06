@@ -22,6 +22,7 @@
     {% csrf_token %}
   </form>
   <input type="button" value="Delete" onclick="confirmDelete({{ comment.id }})">
+  <a href="{% url 'edit_comment' comment.pk %}">Edit</a>
 {% endif %}
       <a class="btn btn-primary" data-toggle="collapse" href="#reply-form-{{ comment.id }}" role="button" aria-expanded="false" aria-controls="reply-form-{{ comment.id }}">
         Reply
@@ -40,6 +41,7 @@
                     {% csrf_token %}
                   </form>
                   <input type="button" value="Delete" onclick="confirmDelete({{ child.id }})">
+                  <a href="{% url 'edit_comment' comment.pk %}">Edit</a>
                 {% endif %}
               </li>
             {% endfor %}

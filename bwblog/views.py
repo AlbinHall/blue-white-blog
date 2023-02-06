@@ -200,3 +200,16 @@ def delete_comment(request, pk):
 
 
     return redirect('discussion_detail', pk=comment.discussion.pk)
+
+def edit_comment(request, pk):
+    comment = get_object_or_404(CommentDisc, pk=pk)
+    if request.user != comment.author:
+        return redirect('discussion_detail', pk=comment.discussion.pk)
+    if request.method == 'POST':
+        form = CommentFormDisc(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            return redirect('discussion_detail', pk=comment.discussion.pk)
+    else:
+        form = CommentFormDisc(instance=comment)
+    return render(request, 'edit_comment.html', {'form': form})
