@@ -1,54 +1,52 @@
 {% extends 'base.html' %}
-{% block content %}
-
+{% block content %} {% load crispy_forms_tags %}
+ 
 <h2>Discussion: {{ discussion.title }}</h2>
 <p>{{ discussion.description }}</p>
 <h3>Comments:</h3>
-<ul>
-  {% for comment in comments %}
-    <li>{{ comment.text }}</li>
-    {% if comment.children.exists %}
-      <ul>
-        {% for child in comment.children.all %}
-          <li>{{ child.text }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-    <form method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <input type="hidden" name="parent_id" value="{{ comment.id }}">
-      <button type="submit">Reply</button>
-    </form>
-  {% endfor %}
-</ul>
+{% for comment in comments %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title">{{ comment.author }}</h5>
+      <p class="card-text">{{ comment.text }}</p>
+      <a class="btn btn-primary" data-toggle="collapse" href="#reply-form-{{ comment.id }}" role="button" aria-expanded="false" aria-controls="reply-form-{{ comment.id }}">
+        Reply
+      </a>
+      {% if comment.children.exists %}
+        <a class="btn btn-primary" data-toggle="collapse" href="#child-comments-{{ comment.id }}" role="button" aria-expanded="false" aria-controls="child-comments-{{ comment.id }}">
+          Show Replies
+        </a>
+        <div class="collapse" id="child-comments-{{ comment.id }}">
+          <ul class="list-group list-group-flush">
+            {% for child in comment.children.all %}
+              <li class="list-group-item">{{ child.text }} | {{ child.author }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </div>
+    <div class="collapse" id="reply-form-{{ comment.id }}">
+      <div class="card-footer">
+        <form method="post">
+          {% csrf_token %}
+          {{ form | crispy }}
+          <input type="hidden" name="parent_id" value="{{ comment.id }}">
+          <button type="submit" class="btn btn-primary">Submit Reply</button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+
+
+
+
 </div>
 <hr>
 <h3>Add a Comment</h3>
 <form method="post">
   {% csrf_token %}
-  {{ form.as_p }}
+  {{ form | crispy }}
   <button type="submit">Save</button>
 </form>
-<script>
-  $(document).on("click", ".reply-button", function() {
-    var commentId = $(this).data("comment-id");
-    $(".reply-form[data-comment-id=" + commentId + "]").toggle();
-  });
-
-  $(document).on("submit", ".reply-form", function(event) {
-    event.preventDefault();
-
-    var form = $(this);
-    var commentId = form.data("comment-id");
-    var commentText = form.find("input[name=text]").val();
-
-    // Send an AJAX request to the server to save the reply
-    $.post("/save-reply/", { comment_id: commentId, text: commentText }, function(data) {
-      // Add the reply to the list of child comments for the parent comment
-      form.before("<div class='comment'>" + commentText + "</div>");
-      form.toggle();
-    });
-  });
-</script>
 {% endblock %}
