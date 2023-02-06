@@ -8,12 +8,24 @@
 </ul>
 {% endif %}
 
-<h2>Discussion: {{ discussion.title }}</h2>
-<p>{{ discussion.description }}</p>
+<div class="container">
+  <div class="row">
+      <div class="col card mb-4  mt-3 left bg-light top">
+          <div class="card-body">
+      <small>By: {{ discussion.author}}</small>
+      <h2>{{ discussion.title }}</h2>
+      <p>{{ discussion.description }}</p>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Displaying the comments -->
 <h3>Comments:</h3>
 {% for comment in comments %}
-  <div class="card mb-3">
-    <div class="card-body">
+{% if not comment.parent %}
+<div class="row m-3">
+  <div class="col-md-6 card mb-4  mt-3  border border-dark rounded bg-light">
       <h5 class="card-title">{{ comment.author }}</h5>
       <p class="card-text">{{ comment.text }}</p>
       {% if request.user == comment.author %}
@@ -21,27 +33,27 @@
   <form action="{% url 'delete_comment' comment.id %}" method="post" id="delete-form-{{ comment.id }}">
     {% csrf_token %}
   </form>
-  <input type="button" value="Delete" onclick="confirmDelete({{ comment.id }})">
-  <a href="{% url 'edit_comment' comment.pk %}">Edit</a>
+  <input type="button" value="Delete" class="btn btn-danger" onclick="confirmDelete({{ comment.id }})">
+  <a class="btn btn-primary" href="{% url 'edit_comment' comment.pk %}">Edit</a>
 {% endif %}
       <a class="btn btn-primary" data-toggle="collapse" href="#reply-form-{{ comment.id }}" role="button" aria-expanded="false" aria-controls="reply-form-{{ comment.id }}">
         Reply
       </a>
+      {% endif %}
       {% if comment.children.exists %}
-        <a class="btn btn-primary" data-toggle="collapse" href="#child-comments-{{ comment.id }}" role="button" aria-expanded="false" aria-controls="child-comments-{{ comment.id }}">
-          Show Replies
+        <a class="btn btn-link" data-toggle="collapse" href="#child-comments-{{ comment.id }}" role="button" aria-expanded="false" aria-controls="child-comments-{{ comment.id }}">
+          <i class="fa-solid fa-angle-down"></i><span> {{ comment.children.count }}</span>
         </a>
         <div class="collapse" id="child-comments-{{ comment.id }}">
           <ul class="list-group list-group-flush">
             {% for child in comment.children.all %}
-              <li class="list-group-item">{{ child.text }} | {{ child.author }}
+              <li class="list-group-item m-2 border border-dark rounded">{{ child.text }} <br> by: <small>{{ child.author }}</small>
                 {% if request.user == child.author %}
                   {% csrf_token %}
                   <form action="{% url 'delete_comment' child.id %}" method="post" id="delete-form-{{ child.id }}">
                     {% csrf_token %}
                   </form>
-                  <input type="button" value="Delete" onclick="confirmDelete({{ child.id }})">
-                  <a href="{% url 'edit_comment' comment.pk %}">Edit</a>
+                  <input class="btn btn-danger" type="button" value="Delete" onclick="confirmDelete({{ child.id }})">
                 {% endif %}
               </li>
             {% endfor %}
@@ -49,14 +61,20 @@
         </div>
       {% endif %}
     </div>
+</div>
+<!-- Reply comment form  -->
     <div class="collapse" id="reply-form-{{ comment.id }}">
+      <div class="row justify-content-center">
+        <div class="col-md-12 card-body m-4 mt-3 border border-dark rounded bg-light">
       <div class="card-footer">
         <form method="post">
           {% csrf_token %}
           {{ form | crispy }}
           <input type="hidden" name="parent_id" value="{{ comment.id }}">
-          <button type="submit" class="btn btn-primary">Submit Reply</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
         </form>
+      </div>
+    </div>
       </div>
     </div>
   </div>
@@ -67,12 +85,18 @@
 
 </div>
 <hr>
+<div class="row justify-content-center">
+  <div class="col-md-6 card mb-4  mt-3 ">
+      <div class="card-body">
 <h3>Add a Comment</h3>
 <form method="post">
   {% csrf_token %}
   {{ form | crispy }}
   <button type="submit">Save</button>
 </form>
+      </div>
+  </div>
+</div>
 
 <script>
 function confirmDelete(commentId) {

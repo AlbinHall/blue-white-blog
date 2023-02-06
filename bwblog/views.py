@@ -209,7 +209,9 @@ def edit_comment(request, pk):
         form = CommentFormDisc(request.POST, instance=comment)
         if form.is_valid():
             form.save()
+            messages.info(request, 'Your comment has been successfully edited.')
             return redirect('discussion_detail', pk=comment.discussion.pk)
     else:
         form = CommentFormDisc(instance=comment)
-    return render(request, 'edit_comment.html', {'form': form})
+    return render(request, 'edit_comment_disc.html', {'form': form})
+
