@@ -62,20 +62,20 @@ class Profile(models.Model):
 # Models for the discussion page
 class Discussion(models.Model):
     title = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField(max_length=300)
     date_created = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.title
 
+
 class CommentDisc(models.Model):
-    text = models.TextField()
+    text = models.TextField(max_length=150)
     date_created = models.DateTimeField(auto_now_add=True)
     discussion = models.ForeignKey(Discussion, on_delete=models.CASCADE, related_name='comments')
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='children')
 
-    
     def __str__(self):
         return self.text
