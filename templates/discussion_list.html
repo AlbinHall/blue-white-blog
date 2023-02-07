@@ -24,22 +24,50 @@
 </div>
 
 <!-- Displaying the discussions -->
-<br>
-<div class="row justify-content-center">
-    {% for discussion in discussions %}
-    <div class="col-md-6 m-2">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ discussion.title }}</h5>
-                <p class="card-text">{{ discussion.description }}</p>
-                <p>Author: {{ discussion.author }}</p>
-                <p>Date Created: {{ discussion.date_created }}</p>
-                <a href="{% url 'discussion_detail' discussion.pk %}">View Discussion</a>
-            </div>
-        </div>
-    </div>
-{% endfor %}
+
+{% for discussion in page_obj %}
+<div class="card mb-3">
+  <div class="card-body">
+    <h5 class="card-title">{{ discussion.title }}</h5>
+    <p class="card-text">{{ discussion.description }}</p>
+    <p class="card-text">Author: {{ discussion.author }}</p>
+    <p class="card-text">Date Created: {{ discussion.date_created }}</p>
+    <a href="{% url 'discussion_detail' discussion.pk %}" class="btn btn-primary">View Discussion</a>
+  </div>
 </div>
+{% endfor %}
+<div class="d-flex justify-content-center mt-3">
+<ul class="pagination">
+  {% if page_obj.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page=1">First</a>
+    </li>
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    </li>
+  {% endif %}
+  {% for page_number in page_obj.paginator.page_range %}
+    {% if page_number == page_obj.number %}
+      <li class="page-item active">
+        <a class="page-link" href="#">{{ page_number }}</a>
+      </li>
+    {% else %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+      </li>
+    {% endif %}
+  {% endfor %}
+  {% if page_obj.has_next %}
+  <li class="page-item">
+    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+    </li>
+    <li class="page-item">
+    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+    </li>
+    {% endif %}
+    
+    </ul>
+    </div>
 
 <!-- creating a new discussion -->
 <div class="row justify-content-center">

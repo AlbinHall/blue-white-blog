@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.views.generic import UpdateView, DeleteView
 from django.template.loader import render_to_string
 from django.db.models import Q
+from django.core.paginator import Paginator
 
 
 class PostList(generic.ListView):
@@ -158,11 +159,15 @@ def send_email(request):
 
 def discussion_list(request):
     q = request.GET.get('q')
+    discussions = Discussion.objects.all().order_by('-date_created')
     if q:
         discussions = Discussion.objects.filter(Q(title__icontains=q) | Q(description__icontains=q)).order_by('-date_created')
-    else:
-        discussions = Discussion.objects.all().order_by('-date_created')
-    return render(request, 'discussion_list.html', {'discussions': discussions})
+    
+    paginator = Paginator(discussions, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'discussion_list.html', {'page_obj': page_obj})
 
 
 def discussion_detail(request, pk):
