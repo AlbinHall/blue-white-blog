@@ -1,5 +1,9 @@
 {% extends 'base.html' %} {% block content %}
 <h2>Discussions</h2>
+<form method="get">
+    <input type="text" name="q" placeholder="Search discussions">
+    <input type="submit" value="Search">
+</form>
 {% for discussion in discussions %}
 <div class="discussion">
     <h3>{{ discussion.title }}</h3>
@@ -11,4 +15,3 @@
 {% endfor %}
 <a href="{% url 'discussion_create' %}">Create a New Discussion</a>
 {% endblock %}
-

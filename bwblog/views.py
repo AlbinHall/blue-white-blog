@@ -8,6 +8,7 @@ from .forms import CommentForm, ContactForm, DiscussionForm, CommentFormDisc
 from django.contrib import messages
 from django.views.generic import UpdateView, DeleteView
 from django.template.loader import render_to_string
+from django.db.models import Q
 
 
 class PostList(generic.ListView):
@@ -156,9 +157,12 @@ def send_email(request):
 
 
 def discussion_list(request):
-    discussions = Discussion.objects.all().order_by('-date_created')
+    q = request.GET.get('q')
+    if q:
+        discussions = Discussion.objects.filter(Q(title__icontains=q) | Q(description__icontains=q)).order_by('-date_created')
+    else:
+        discussions = Discussion.objects.all().order_by('-date_created')
     return render(request, 'discussion_list.html', {'discussions': discussions})
-
 
 def discussion_detail(request, pk):
     discussion = get_object_or_404(Discussion, pk=pk)
