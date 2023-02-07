@@ -201,6 +201,7 @@ def discussion_create(request):
         form = DiscussionForm()
     return render(request, 'discussion_create.html', {'form': form})
 
+
 def delete_comment(request, pk):
     comment = get_object_or_404(CommentDisc, pk=pk)
     if request.user == comment.author:
@@ -211,6 +212,7 @@ def delete_comment(request, pk):
 
 
     return redirect('discussion_detail', pk=comment.discussion.pk)
+
 
 def edit_comment(request, pk):
     comment = get_object_or_404(CommentDisc, pk=pk)
@@ -225,4 +227,16 @@ def edit_comment(request, pk):
     else:
         form = CommentFormDisc(instance=comment)
     return render(request, 'edit_comment_disc.html', {'form': form})
+
+
+def delete_discussion(request, pk):
+    discussion = get_object_or_404(Discussion, pk=pk)
+    if request.user == discussion.author:
+        discussion.delete()
+        messages.add_message(request, messages.SUCCESS, 'Discussion deleted!')
+    else:
+        messages.add_message(request, messages.WARNING, 'You can only delete your own discussion!')
+
+    return redirect('discussion_list')
+
 

@@ -1,5 +1,14 @@
 {% extends 'base.html' %} 
 {% block content %}
+<!-- message displaying  -->
+{% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
 <div class="container">
     <div class="row justify-content-center">
 <h2 class="text-center m-2" >Discussions</h2>
@@ -26,16 +35,28 @@
 <!-- Displaying the discussions -->
 
 {% for discussion in page_obj %}
-<div class="card mb-3">
+<div class="row justify-content-center p-2">
+<div class="card col-md-4 m-2">
   <div class="card-body">
     <h5 class="card-title">{{ discussion.title }}</h5>
     <p class="card-text">{{ discussion.description }}</p>
     <p class="card-text">Author: {{ discussion.author }}</p>
     <p class="card-text">Date Created: {{ discussion.date_created }}</p>
     <a href="{% url 'discussion_detail' discussion.pk %}" class="btn btn-primary">View Discussion</a>
+    {% if request.user == discussion.author %}
+    <div class="row justify-content-center">
+    {% csrf_token %}
+    <form action="{% url 'delete_discussion' discussion.id %}" method="post" id="delete-form-{{ discussion.id }}">
+      {% csrf_token %}
+    </form>
+    <input type="button" value="Delete" class=" m-2 btn btn-danger" onclick="confirmDelete({{ discussion.id }})">
   </div>
+  {% endif %}
+</div>
+</div>
 </div>
 {% endfor %}
+
 <div class="d-flex justify-content-center mt-3">
 <ul class="pagination">
   {% if page_obj.has_previous %}
@@ -102,4 +123,14 @@
       </div>
     </div>
   </div>
+
+  <!-- script for alert when deleting -->
+
+  <script>
+    function confirmDelete(disscussionId) {
+      if (confirm("Are you sure you want to delete the discussion?")) {
+        document.getElementById("delete-form-" + disscussionId).submit();
+      }
+          }
+    </script>
 {% endblock %}
