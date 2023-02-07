@@ -1,17 +1,77 @@
-{% extends 'base.html' %} {% block content %}
-<h2>Discussions</h2>
-<form method="get">
-    <input type="text" name="q" placeholder="Search discussions">
-    <input type="submit" value="Search">
-</form>
-{% for discussion in discussions %}
-<div class="discussion">
-    <h3>{{ discussion.title }}</h3>
-    <p>{{ discussion.description }}</p>
-    <p>Author: {{ discussion.author }}</p>
-    <p>Date Created: {{ discussion.date_created }}</p>
-    <a href="{% url 'discussion_detail' discussion.pk %}">View Discussion</a>
+{% extends 'base.html' %} 
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+<h2 class="text-center m-2" >Discussions</h2>
+<br>
+<a href="{% url 'discussion_list' %}" class=" m-2 text-dark"><i class="fa-solid fa-arrows-rotate"></i></a>
 </div>
+</div>
+
+<!-- Search for different discussions -->
+<div class="row justify-content-center">
+    <div class=" m-2">
+        <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm"><i class="fa-solid fa-futbol"></i></span>
+            </div>
+            <form method="get">
+                <input class="" type="text" name="q" placeholder="">
+                <input class=""  type="submit" value="Search">
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Displaying the discussions -->
+<br>
+<div class="row justify-content-center">
+    {% for discussion in discussions %}
+    <div class="col-md-6 m-2">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ discussion.title }}</h5>
+                <p class="card-text">{{ discussion.description }}</p>
+                <p>Author: {{ discussion.author }}</p>
+                <p>Date Created: {{ discussion.date_created }}</p>
+                <a href="{% url 'discussion_detail' discussion.pk %}">View Discussion</a>
+            </div>
+        </div>
+    </div>
 {% endfor %}
-<a href="{% url 'discussion_create' %}">Create a New Discussion</a>
+</div>
+
+<!-- creating a new discussion -->
+<div class="row justify-content-center">
+    <div class="m-2">
+{% if user.is_authenticated %}
+<a class="btn btn-success" href="{% url 'discussion_create' %}">Create a New Discussion</a>
+{% else %}
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Create a New Discussion
+  </button>
+  {% endif %}
+    </div>
+</div>
+
+<!-- Modal for non authenitcated user -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Login To create discussion</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+            <a href="{% url 'account_login' %}" class="btn btn-success">Login</a>
+            <a href="{% url 'account_signup' %}" class="btn btn-primary">Sign Up</a>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

@@ -164,6 +164,7 @@ def discussion_list(request):
         discussions = Discussion.objects.all().order_by('-date_created')
     return render(request, 'discussion_list.html', {'discussions': discussions})
 
+
 def discussion_detail(request, pk):
     discussion = get_object_or_404(Discussion, pk=pk)
     comments = discussion.comments.all()
@@ -181,6 +182,7 @@ def discussion_detail(request, pk):
     else:
         form = CommentFormDisc()
     return render(request, 'discussion_detail.html', {'discussion': discussion, 'comments': comments, 'form': form})
+
 
 def discussion_create(request):
     if request.method == 'POST':
