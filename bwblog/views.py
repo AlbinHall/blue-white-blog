@@ -10,6 +10,8 @@ from django.views.generic import UpdateView, DeleteView
 from django.template.loader import render_to_string
 from django.db.models import Q
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
+
 
 
 class PostList(generic.ListView):
@@ -184,14 +186,19 @@ def discussion_detail(request, pk):
                 comment.parent = CommentDisc.objects.get(id=parent_id)
             comment.save()
             return redirect('discussion_detail', pk=discussion.pk)
-        elif request.POST.get('like'):
-            discussion.likes += 1
-            discussion.save()
-            return redirect('discussion_detail', pk=discussion.pk)
-        elif request.POST.get('dislike'):
-            discussion.dislikes += 1
-            discussion.save()
-            return redirect('discussion_detail', pk=discussion.pk)
+    elif request.method == 'GET':
+        if request.GET.get('like'):
+            if request.user not in discussion.likes.all() and request.user not in discussion.dislikes.all():
+                discussion.likes.add(request.user)
+                discussion.save()
+            else:
+                messages.info(request, 'You can only like or dislike a discussion once.')
+        elif request.GET.get('dislike'):
+            if request.user not in discussion.likes.all() and request.user not in discussion.dislikes.all():
+                discussion.dislikes.add(request.user)
+                discussion.save()
+            else:
+                messages.info(request, 'You can only like or dislike a discussion once.')
     else:
         form = CommentFormDisc()
     return render(request, 'discussion_detail.html', {'discussion': discussion, 'comments': comments, 'form': form})

@@ -10,23 +10,39 @@
 
 <div class="container">
   <div class="row">
-      <div class="col card mb-4  mt-3 left bg-light top">
+      <div class="col shadow card mb-4  mt-3 left bg-light top">
           <div class="card-body">
       <small>By: {{ discussion.author}}</small>
       <h2>{{ discussion.title }}</h2>
       <p>{{ discussion.description }}</p>
-      <form method="post">
-        {% csrf_token %}
-        <input type="submit" name="like" value="Like">
-        <input type="submit" name="dislike" value="Dislike">
-      </form>
+      <div class="likes-dislikes">
+        <p>Likes: {{ discussion.number_of_likes }}</p>
+        <form method="post">
+          {% csrf_token %}
+          {% if not liked %}
+            <button type="submit" name="like" class="like-button">Like</button>
+          {% else %}
+            <button type="submit" class="like-button" disabled>Liked</button>
+          {% endif %}
+        </form>
       
-      <p>Likes: {{ discussion.likes }}</p>
-      <p>Dislikes: {{ discussion.dislikes }}</p>
+        <p>Dislikes: {{ discussion.dislikes.count }}</p>
+        <form method="post">
+          {% csrf_token %}
+          {% if not disliked %}
+            <button type="submit" name="dislike" class="dislike-button">Dislike</button>
+          {% else %}
+            <button type="submit" class="dislike-button" disabled>Disliked</button>
+          {% endif %}
+        </form>
+      </div>
+      
           </div>
       </div>
     </div>
   </div>
+
+
 
 
   <!-- Displaying the comments -->
@@ -34,7 +50,7 @@
 {% for comment in comments %}
 {% if not comment.parent %}
 <div class="row justify-content-center m-3">
-  <div class="col-md-6 card border border-dark p-2 rounded bg-light">
+  <div class="shadow col-md-6 card border p-2 rounded bg-light">
     <h5 class="card-title text-center">By: {{ comment.author }}</h5>
     <p class="card-text p-2">{{ comment.text }}</p>
       {% if request.user == comment.author %}
@@ -60,7 +76,7 @@
         <div class="collapse" id="child-comments-{{ comment.id }}">
           <ul class="list-group list-group-flush">
             {% for child in comment.children.all %}
-              <li class="list-group-item m-2 border border-dark rounded">{{ child.text }} <br> by: <small>{{ child.author }}</small>
+              <li class="list-group-item m-2 border shadow rounded">{{ child.text }} <br> by: <small>{{ child.author }}</small>
                 {% if request.user == child.author %}
                   {% csrf_token %}
                   <form action="{% url 'delete_comment' child.id %}" method="post" id="delete-form-{{ child.id }}">
@@ -78,7 +94,7 @@
 <!-- Reply comment form  -->
     <div class="collapse" id="reply-form-{{ comment.id }}">
       <div class="row justify-content-center">
-        <div class="col-md-12 card-body m-4 mt-3 border border-dark rounded bg-light">
+        <div class="col-md-6 card-body m-4 mt-3 border shadow rounded bg-light">
       <div class="card-footer">
         <form method="post">
           {% csrf_token %}
@@ -101,13 +117,13 @@
 </div>
 <hr>
 <div class="row justify-content-center">
-  <div class="col-md-6 card mb-4  mt-3 ">
+  <div class="col-md-8 shadow card mb-4  mt-3 ">
       <div class="card-body">
 <h3>Add a Comment</h3>
 <form method="post">
   {% csrf_token %}
   {{ form | crispy }}
-  <button type="submit">Save</button>
+  <button class="btn btn-primary" type="submit">Submit</button>
 </form>
       </div>
   </div>
