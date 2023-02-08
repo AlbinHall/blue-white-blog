@@ -15,10 +15,19 @@
       <small>By: {{ discussion.author}}</small>
       <h2>{{ discussion.title }}</h2>
       <p>{{ discussion.description }}</p>
+      <form method="post">
+        {% csrf_token %}
+        <input type="submit" name="like" value="Like">
+        <input type="submit" name="dislike" value="Dislike">
+      </form>
+      
+      <p>Likes: {{ discussion.likes }}</p>
+      <p>Dislikes: {{ discussion.dislikes }}</p>
           </div>
       </div>
     </div>
   </div>
+
 
   <!-- Displaying the comments -->
 <h3 class="text-center">Comments:</h3>

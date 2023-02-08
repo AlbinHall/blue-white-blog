@@ -184,9 +184,20 @@ def discussion_detail(request, pk):
                 comment.parent = CommentDisc.objects.get(id=parent_id)
             comment.save()
             return redirect('discussion_detail', pk=discussion.pk)
+        elif request.POST.get('like'):
+            discussion.likes += 1
+            discussion.save()
+            return redirect('discussion_detail', pk=discussion.pk)
+        elif request.POST.get('dislike'):
+            discussion.dislikes += 1
+            discussion.save()
+            return redirect('discussion_detail', pk=discussion.pk)
     else:
         form = CommentFormDisc()
     return render(request, 'discussion_detail.html', {'discussion': discussion, 'comments': comments, 'form': form})
+
+
+
 
 
 def discussion_create(request):
@@ -238,5 +249,7 @@ def delete_discussion(request, pk):
         messages.add_message(request, messages.WARNING, 'You can only delete your own discussion!')
 
     return redirect('discussion_list')
+
+
 
 

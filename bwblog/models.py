@@ -65,6 +65,8 @@ class Discussion(models.Model):
     description = models.TextField(max_length=300)
     date_created = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    likes = models.IntegerField(default=0)
+    dislikes = models.IntegerField(default=0)
     
     def __str__(self):
         return self.title
@@ -81,13 +83,3 @@ class CommentDisc(models.Model):
         return self.text
 
 
-class LikeDislike(models.Model):
-    LIKED = 1
-    DISLIKED = -1
-    VOTE_CHOICES = (
-        (LIKED, 'Like'),
-        (DISLIKED, 'Dislike'),
-    )
-    vote = models.SmallIntegerField(choices=VOTE_CHOICES)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    discussion = models.ForeignKey(Discussion, on_delete=models.CASCADE)
