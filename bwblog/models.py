@@ -66,15 +66,16 @@ class Discussion(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     likes = models.ManyToManyField(User, related_name='likes', blank=True)
-    likes_count = models.IntegerField(default=0)
     dislikes = models.ManyToManyField(User, related_name='dislikes', blank=True)
-    dislikes_count = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
 
     def number_of_likes(self):
         return self.likes.count()
+    
+    def number_of_dislikes(self):
+        return self.dislikes.count()
 
 class CommentDisc(models.Model):
     text = models.TextField(max_length=150)

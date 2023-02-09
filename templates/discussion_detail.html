@@ -17,30 +17,32 @@
       <p>{{ discussion.description }}</p>
       <div class="likes-dislikes">
         <p>Likes: {{ discussion.number_of_likes }}</p>
-        <form method="post">
+        <form method="post" action="{% url 'toggle_like' discussion.pk %}">
           {% csrf_token %}
-          {% if not liked %}
+          {% if user not in discussion.likes.all %}
             <button type="submit" name="like" class="like-button">Like</button>
           {% else %}
-            <button type="submit" class="like-button" disabled>Liked</button>
+            <button type="submit" name="unlike" class="like-button">Unlike</button>
           {% endif %}
         </form>
       
-        <p>Dislikes: {{ discussion.dislikes.count }}</p>
-        <form method="post">
+        <p>Dislikes: {{ discussion.number_of_dislikes }}</p>
+        <form method="post" action="{% url 'toggle_dislike' discussion.pk %}">
           {% csrf_token %}
-          {% if not disliked %}
+          {% if user not in discussion.dislikes.all %}
             <button type="submit" name="dislike" class="dislike-button">Dislike</button>
           {% else %}
-            <button type="submit" class="dislike-button" disabled>Disliked</button>
+            <button type="submit" name="undislike" class="dislike-button">Undislike</button>
           {% endif %}
         </form>
       </div>
+      
       
           </div>
       </div>
     </div>
   </div>
+
 
 
 

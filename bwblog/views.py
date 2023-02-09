@@ -175,6 +175,13 @@ def discussion_list(request):
 def discussion_detail(request, pk):
     discussion = get_object_or_404(Discussion, pk=pk)
     comments = discussion.comments.all()
+    user = request.user
+    liked = False
+    disliked = False
+    if user in discussion.likes.all():
+        liked = True
+    if user in discussion.dislikes.all():
+        disliked = True
     if request.method == 'POST':
         form = CommentFormDisc(request.POST)
         if form.is_valid():
@@ -186,25 +193,9 @@ def discussion_detail(request, pk):
                 comment.parent = CommentDisc.objects.get(id=parent_id)
             comment.save()
             return redirect('discussion_detail', pk=discussion.pk)
-    elif request.method == 'GET':
-        if request.GET.get('like'):
-            if request.user not in discussion.likes.all() and request.user not in discussion.dislikes.all():
-                discussion.likes.add(request.user)
-                discussion.save()
-            else:
-                messages.info(request, 'You can only like or dislike a discussion once.')
-        elif request.GET.get('dislike'):
-            if request.user not in discussion.likes.all() and request.user not in discussion.dislikes.all():
-                discussion.dislikes.add(request.user)
-                discussion.save()
-            else:
-                messages.info(request, 'You can only like or dislike a discussion once.')
     else:
         form = CommentFormDisc()
-    return render(request, 'discussion_detail.html', {'discussion': discussion, 'comments': comments, 'form': form})
-
-
-
+    return render(request, 'discussion_detail.html', {'discussion': discussion, 'comments': comments, 'form': form, 'liked': liked, 'disliked': disliked})
 
 
 def discussion_create(request):
@@ -227,7 +218,6 @@ def delete_comment(request, pk):
         messages.add_message(request, messages.SUCCESS, 'Comment deleted!')
     else:
         messages.add_message(request, messages.WARNING, 'You can only delete your own comment!')
-
 
     return redirect('discussion_detail', pk=comment.discussion.pk)
 
@@ -258,5 +248,23 @@ def delete_discussion(request, pk):
     return redirect('discussion_list')
 
 
+def toggle_like(request, pk):
+    discussion = get_object_or_404(Discussion, pk=pk)
+    user = request.user
+    if user in discussion.likes.all():
+        discussion.likes.remove(user)
+    else:
+        discussion.likes.add(user)
+    return redirect('discussion_detail', pk=pk)
+
+
+def toggle_dislike(request, pk):
+    discussion = get_object_or_404(Discussion, pk=pk)
+    user = request.user
+    if user in discussion.dislikes.all():
+        discussion.dislikes.remove(user)
+    else:
+        discussion.dislikes.add(user)
+    return redirect('discussion_detail', pk=pk)
 
 
