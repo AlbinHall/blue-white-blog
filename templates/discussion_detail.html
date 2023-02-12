@@ -3,51 +3,49 @@
 {% if messages %}
 <ul class="messages">
   {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-  {% endfor %}
+  <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
 </ul>
 {% endif %}
-
+<!-- displaying the discussion with likes and dislikes -->
 <div class="container">
   <div class="row">
-      <div class="col shadow card mb-4  mt-3 left bg-light top">
-          <div class="card-body">
-      <small>By: {{ discussion.author}}</small>
-      <h2>{{ discussion.title }}</h2>
-      <p>{{ discussion.description }}</p>
-      <div class="likes-dislikes">
-        <p>Likes: {{ discussion.number_of_likes }}</p>
-        <form method="post" action="{% url 'toggle_like' discussion.pk %}">
-          {% csrf_token %}
-          {% if user not in discussion.likes.all %}
-            <button type="submit" name="like" class="like-button">Like</button>
-          {% else %}
-            <button type="submit" name="unlike" class="like-button">Unlike</button>
-          {% endif %}
-        </form>
-      
-        <p>Dislikes: {{ discussion.number_of_dislikes }}</p>
-        <form method="post" action="{% url 'toggle_dislike' discussion.pk %}">
-          {% csrf_token %}
-          {% if user not in discussion.dislikes.all %}
-            <button type="submit" name="dislike" class="dislike-button">Dislike</button>
-          {% else %}
-            <button type="submit" name="undislike" class="dislike-button">Undislike</button>
-          {% endif %}
-        </form>
-      </div>
-      
-      
-          </div>
+    <div class="col shadow card mb-4  mt-3 left bg-light top">
+      <div class="card-body">
+        <small>By: {{ discussion.author}}</small>
+        <h2>{{ discussion.title }}</h2>
+        <p>{{ discussion.description }}</p>
+        <div class="row">
+          <form method="post" action="{% url 'toggle_like' discussion.pk %}">
+            {% csrf_token %}
+            {% if user not in discussion.likes.all %}
+            <button type="submit" name="like" class="btn btn-light"><i class="fa-regular fa-thumbs-up"></i><span>
+                {{ discussion.number_of_likes }} </span></button>
+            {% else %}
+            <button type="submit" name="unlike" class="btn btn-light"><i class="fa-solid fa-thumbs-up"></i><span>
+                {{ discussion.number_of_likes }} </span></button>
+            {% endif %}
+          </form>
+
+          <form method="post" action="{% url 'toggle_dislike' discussion.pk %}">
+            {% csrf_token %}
+            {% if user not in discussion.dislikes.all %}
+            <button type="submit" name="dislike" class="btn btn-light"><i class="fa-regular fa-thumbs-down"></i><span>
+                {{ discussion.number_of_dislikes }}</span></button>
+            {% else %}
+            <button type="submit" name="undislike" class="btn btn-light"><i class="fa-solid fa-thumbs-down"></i><span>
+                {{ discussion.number_of_dislikes }}</span></button>
+            {% endif %}
+          </form>
+        </div>
+
+
       </div>
     </div>
   </div>
+</div>
 
-
-
-
-
-  <!-- Displaying the comments -->
+<!-- Displaying the comments -->
 <h3 class="text-center">Comments:</h3>
 {% for comment in comments %}
 {% if not comment.parent %}
@@ -55,48 +53,52 @@
   <div class="shadow col-md-6 card border p-2 rounded bg-light">
     <h5 class="card-title text-center">By: {{ comment.author }}</h5>
     <p class="card-text p-2">{{ comment.text }}</p>
-      {% if request.user == comment.author %}
-      <div class="row justify-content-center">
-        <div>
-  {% csrf_token %}
-  <form action="{% url 'delete_comment' comment.id %}" method="post" id="delete-form-{{ comment.id }}">
-    {% csrf_token %}
-  </form>
-  <input type="button" value="Delete" class="btn btn-danger" onclick="confirmDelete({{ comment.id }})">
-  <a class="btn btn-primary" href="{% url 'edit_comment' comment.pk %}">Edit</a>
-{% endif %}
-      <a class="btn btn-primary" data-toggle="collapse" href="#reply-form-{{ comment.id }}" role="button" aria-expanded="false" aria-controls="reply-form-{{ comment.id }}">
-        Reply
-      </a>
-        </div>
-      </div>
-      {% endif %}
-      {% if comment.children.exists %}
-        <a class="btn btn-link" data-toggle="collapse" href="#child-comments-{{ comment.id }}" role="button" aria-expanded="false" aria-controls="child-comments-{{ comment.id }}">
-          <i class="fa-solid fa-angle-down"></i><span> {{ comment.children.count }}</span>
+    {% if request.user == comment.author %}
+    <div class="row justify-content-center">
+      <div>
+        {% csrf_token %}
+        <form action="{% url 'delete_comment' comment.id %}" method="post" id="delete-form-{{ comment.id }}">
+          {% csrf_token %}
+        </form>
+        <input type="button" value="Delete" class="btn btn-danger" onclick="confirmDelete({{ comment.id }})">
+        <a class="btn btn-primary" href="{% url 'edit_comment' comment.pk %}">Edit</a>
+        {% endif %}
+        <a class="btn btn-primary" data-toggle="collapse" href="#reply-form-{{ comment.id }}" role="button"
+          aria-expanded="false" aria-controls="reply-form-{{ comment.id }}">
+          Reply
         </a>
-        <div class="collapse" id="child-comments-{{ comment.id }}">
-          <ul class="list-group list-group-flush">
-            {% for child in comment.children.all %}
-              <li class="list-group-item m-2 border shadow rounded">{{ child.text }} <br> by: <small>{{ child.author }}</small>
-                {% if request.user == child.author %}
-                  {% csrf_token %}
-                  <form action="{% url 'delete_comment' child.id %}" method="post" id="delete-form-{{ child.id }}">
-                    {% csrf_token %}
-                  </form>
-                  <input class="btn btn-danger" type="button" value="Delete" onclick="confirmDelete({{ child.id }})">
-                {% endif %}
-              </li>
-            {% endfor %}
-          </ul>
-        </div>
-      {% endif %}
+      </div>
     </div>
+    {% endif %}
+    {% if comment.children.exists %}
+    <a class="btn btn-link" data-toggle="collapse" href="#child-comments-{{ comment.id }}" role="button"
+      aria-expanded="false" aria-controls="child-comments-{{ comment.id }}">
+      <i class="fa-solid fa-angle-down"></i><span> {{ comment.children.count }}</span>
+    </a>
+    <div class="collapse" id="child-comments-{{ comment.id }}">
+      <ul class="list-group list-group-flush">
+        {% for child in comment.children.all %}
+        <li class="list-group-item m-2 border shadow rounded">{{ child.text }} <br> by:
+          <small>{{ child.author }}</small>
+          {% if request.user == child.author %}
+          {% csrf_token %}
+          <form action="{% url 'delete_comment' child.id %}" method="post" id="delete-form-{{ child.id }}">
+            {% csrf_token %}
+          </form>
+          <input class="btn btn-danger" type="button" value="Delete" onclick="confirmDelete({{ child.id }})">
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </div>
 </div>
+
 <!-- Reply comment form  -->
-    <div class="collapse" id="reply-form-{{ comment.id }}">
-      <div class="row justify-content-center">
-        <div class="col-md-6 card-body m-4 mt-3 border shadow rounded bg-light">
+<div class="collapse" id="reply-form-{{ comment.id }}">
+  <div class="row justify-content-center">
+    <div class="col-md-6 card-body m-4 mt-3 border shadow rounded bg-light">
       <div class="card-footer">
         <form method="post">
           {% csrf_token %}
@@ -106,9 +108,9 @@
         </form>
       </div>
     </div>
-      </div>
-    </div>
   </div>
+</div>
+</div>
 {% endfor %}
 
 
@@ -120,22 +122,22 @@
 <hr>
 <div class="row justify-content-center">
   <div class="col-md-8 shadow card mb-4  mt-3 ">
-      <div class="card-body">
-<h3>Add a Comment</h3>
-<form method="post">
-  {% csrf_token %}
-  {{ form | crispy }}
-  <button class="btn btn-primary" type="submit">Submit</button>
-</form>
-      </div>
+    <div class="card-body">
+      <h3>Add a Comment</h3>
+      <form method="post">
+        {% csrf_token %}
+        {{ form | crispy }}
+        <button class="btn btn-primary" type="submit">Submit</button>
+      </form>
+    </div>
   </div>
 </div>
 
 <script>
-function confirmDelete(commentId) {
-  if (confirm("Are you sure you want to delete the comment?")) {
-    document.getElementById("delete-form-" + commentId).submit();
+  function confirmDelete(commentId) {
+    if (confirm("Are you sure you want to delete the comment?")) {
+      document.getElementById("delete-form-" + commentId).submit();
+    }
   }
-      }
 </script>
 {% endblock %}

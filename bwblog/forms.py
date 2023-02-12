@@ -1,4 +1,4 @@
-from .models import Comment, Profile, Discussion, CommentDisc
+from .models import Comment, Discussion, CommentDisc
 from django import forms
 
 

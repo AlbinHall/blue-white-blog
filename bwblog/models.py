@@ -6,10 +6,6 @@ import datetime
 
 STATUS = ((0, "Draft"), (1, "Published"))
 
-# Create your models here.
-
-# class from blog project in code institute
-
 
 class Post(models.Model):
     title = models.CharField(max_length=200, unique=True)
@@ -55,9 +51,6 @@ class Comment(models.Model):
     def number_of_comments(self):
         return self.comments.count()
 
-
-class Profile(models.Model):
-    profile = models.OneToOneField(User, on_delete=models.CASCADE)
 
 # Models for the discussion page
 class Discussion(models.Model):
