@@ -69,17 +69,34 @@ The site is built via github/django
 
 ![The send email section](media/email.png)
 
-### Features Left to Implement
+- __The Discussion list__
 
-- Comment thread page
-  - The site user can start a comment thread to discuss their opinions on certain matters
+  - Users are able to create and engage in already created discussions
+    - Search functionality for topics etc
+
+![The send email section](media/discussion_list.png)
+
+- __The discussion detail__
+
+  - Users are able to like and dislike discussions
+
+![The send email section](media/discussion_detail.png)
+
+- __The comment section__
+
+  - Users are able to comment and reply to comments in a threaded manner
+
+![The send email section](media/comment_reply.png)
+
+
+
+### Features Left to Implement
 
 - More social account login providers
 
-- User who is authenticated and got the right permission can create posts 
-  - give some users the ability to create posts without entering the admin panel
-
 - Javascript function instead of page refresh for comments and like etc
+
+- Like and dislike function for comments and comments replies
 
 ## Testing 
 
@@ -99,15 +116,6 @@ The testing has been done manually both under the development process but also a
   - Whitespace allowed for send email name (Fixed)
   
 
-In this section, you need to convince the assessor that you have conducted enough testing to legitimately believe that the site works well. Essentially, in this part you will want to go over all of your project’s features and ensure that they all work as intended, with the project providing an easy and straightforward way for the users to achieve their goals.
-
-In addition, you should mention in this section how your project looks and works on different browsers and screen sizes.
-
-You should also mention in this section any interesting bugs or problems you discovered during your testing, even if you haven't addressed them yet.
-
-If this section grows too long, you may want to split it off into a separate file and link to it from here.
-
-
 ### Validator Testing 
 
 - HTML
@@ -115,14 +123,13 @@ If this section grows too long, you may want to split it off into a separate fil
 - CSS
     - No errors were found when passing through the official [(Jigsaw) validator](http://jigsaw.w3.org/css-validator/validator$link)
 - JavaScript
-    - No self written Javascript code exist to be tested
+    - javascript for delete warning tested and validated
 
 ### Unfixed Bugs
 
 
 ## Deployment
 
-This section should describe the process you went through to deploy the project to a hosting platform (e.g. GitHub) 
 
 - The site was deployed to Heroku. The steps to deploy are as follows: 
   - First the project was started in gitpod
@@ -134,7 +141,14 @@ This section should describe the process you went through to deploy the project 
 
 The live link can be found here - https://code-institute-org.github.io/love-maths/
 
+## Styling 
+ - The styling was first done in a [Wireframe service provided by figma](https://www.figma.com/files/recent?fuid=1183067792205480494)
 
+ ![Page One](media/wireframe_p_one.png)
+
+ ![Page Two](media/wireframe_p_two.png)
+
+- The Discussion pages was not made in wireframe but was copied in style from the rest of the site.
 ## Credits 
 
 ### Content 
@@ -144,9 +158,12 @@ The live link can be found here - https://code-institute-org.github.io/love-math
 - Whitespace validation for the email form was taken from[stackoverflow](https://stackoverflow.com/questions/332102/what-is-the-best-way-to-catch-and-show-an-error-if-user-enters-only-whitespace-i)
 - Update comment and delete comment view was inspired from[geeksforgeeks](https://www.geeksforgeeks.org/updateview-class-based-views-django/)
 - overall help was taken from Tutors at code institute
+- The comment thread [CSS-tricks](https://css-tricks.com/styling-comment-threads/)
+- Information and inpsiration from [Codemy](https://www.youtube.com/@Codemycom)
 - The icons where taken from [Font Awesome](https://fontawesome.com/)
 - The fonts where taken from [Google Fonts](https://fonts.google.com/about)
 - Styling of page is made with [bootstrap](https://getbootstrap.com/)
+
 
 ### Media
 
