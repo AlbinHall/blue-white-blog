@@ -61,6 +61,9 @@
                 </li>
                 {% else %}
                 <li class="nav-item text-left">
+                    <a class="nav-link" href="{% url 'discussion_list' %}" data-toggle="modal" data-target="#exampleModal">Discussions |</a>
+                </li>
+                <li class="nav-item text-left">
                     <a class="nav-link" href="{% url 'account_signup' %}">Register | </a>
                 </li>
                 <li class="nav-item text-left">
@@ -91,6 +94,28 @@
             </div>
         </div>
     </footer>
+
+<!-- Modal that pops-up if user is not autheticated and tries to access the post_detail-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">You need to be logged in to view this content</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            If you don't already have An account you can sign up by clicking at the sign up button!
+        </div>
+        <div class="modal-footer">
+            <a href="{% url 'account_login' %}" class="btn btn-success">Login</a>
+            <a href="{% url 'account_signup' %}" class="btn btn-primary">Sign Up</a>
+        </div>
+    </div>
+</div>
+</div>
 </body>
 
 </html>
