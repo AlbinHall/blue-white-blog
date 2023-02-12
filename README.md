@@ -96,7 +96,7 @@ The site is built via github/django
 
 - Javascript function instead of page refresh for comments and like etc
 
-- Like and dislike function for comments and comments replies
+- Like and dislike function for comments and comments replies in discussion_detail.html
 
 ## Testing 
 
@@ -106,6 +106,10 @@ The testing has been done manually both under the development process but also a
   - Check so that users can't create accounts/send email without adding the correct information
   - Check so that the site users that is not authenticated can visist the blog posts
     - This has been made so that the un autherised site user can visit the first page but a modal will apear when clicking the posts
+  - Check so that the site users that is not authenticated can't visist the discussion pages
+    - This has been made so that the un autherised site user can visit the first page but a modal will apear when clicking the discussion link in the nav bar
+  - Check so that only the creator of a discussion/comment/reply can edit/delete the comment
+  - Check so that users only can like or dislike the discussion once
   - Check so that authenticated users can't change or delete comments they havent made them self
   - Check so that all the colors works well togheter and does not disturb the user
   - Check so that messages appear to the user when something has been deleted/created or when the user login/logout etc
@@ -114,6 +118,7 @@ The testing has been done manually both under the development process but also a
 
 - __Bugs__
   - Whitespace allowed for send email name (Fixed)
+  - Like/dislike button not working for discussions (Fixed)
   
 
 ### Validator Testing 
@@ -141,14 +146,16 @@ The testing has been done manually both under the development process but also a
 
 The live link can be found here - https://code-institute-org.github.io/love-maths/
 
-## Styling 
+## Styling And Design
  - The styling was first done in a [Wireframe service provided by figma](https://www.figma.com/files/recent?fuid=1183067792205480494)
 
  ![Page One](media/wireframe_p_one.png)
 
  ![Page Two](media/wireframe_p_two.png)
 
-- The Discussion pages was not made in wireframe but was copied in style from the rest of the site.
+- The Discussion pages were not made in a wireframe but were copied in style from the rest of the site.
+- The route I've taken with the design part is less is more, the whole blog is designed to be minimalistic and clean
+- The use of bootstraps card is an important implementation of the blog because it displays the content in a clean and simple manner 
 ## Credits 
 
 ### Content 
@@ -158,6 +165,7 @@ The live link can be found here - https://code-institute-org.github.io/love-math
 - Whitespace validation for the email form was taken from[stackoverflow](https://stackoverflow.com/questions/332102/what-is-the-best-way-to-catch-and-show-an-error-if-user-enters-only-whitespace-i)
 - Update comment and delete comment view was inspired from[geeksforgeeks](https://www.geeksforgeeks.org/updateview-class-based-views-django/)
 - overall help was taken from Tutors at code institute
+- overall help and trouble shooting was taken from ChatGPT by [openai](https://openai.com/)
 - The comment thread [CSS-tricks](https://css-tricks.com/styling-comment-threads/)
 - Information and inpsiration from [Codemy](https://www.youtube.com/@Codemycom)
 - The icons where taken from [Font Awesome](https://fontawesome.com/)
