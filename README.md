@@ -156,6 +156,7 @@ The live link can be found here - https://code-institute-org.github.io/love-math
 - The Discussion pages were not made in a wireframe but were copied in style from the rest of the site.
 - The route I've taken with the design part is less is more, the whole blog is designed to be minimalistic and clean
 - The use of bootstraps card is an important implementation of the blog because it displays the content in a clean and simple manner 
+- The colors used is taken from [IFK Göteborg official website](https://ifkgoteborg.se/)
 ## Credits 
 
 ### Content 
@@ -165,7 +166,7 @@ The live link can be found here - https://code-institute-org.github.io/love-math
 - Whitespace validation for the email form was taken from[stackoverflow](https://stackoverflow.com/questions/332102/what-is-the-best-way-to-catch-and-show-an-error-if-user-enters-only-whitespace-i)
 - Update comment and delete comment view was inspired from[geeksforgeeks](https://www.geeksforgeeks.org/updateview-class-based-views-django/)
 - overall help was taken from Tutors at code institute
-- overall help and trouble shooting was taken from ChatGPT by [openai](https://openai.com/)
+- overall help and trouble shooting with the chatGPT bot by [openai](https://openai.com/)
 - The comment thread [CSS-tricks](https://css-tricks.com/styling-comment-threads/)
 - Information and inpsiration from [Codemy](https://www.youtube.com/@Codemycom)
 - The icons where taken from [Font Awesome](https://fontawesome.com/)
